@@ -8,8 +8,7 @@
 	License for the ~ specific language governing permissions and limitations 
 	~ under the License. -->
 <!-- Test Comment -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
         <groupId>org.wso2</groupId>
@@ -21,7 +20,7 @@
     <groupId>org.wso2.bam</groupId>
     <artifactId>wso2bam-parent</artifactId>
     <packaging>pom</packaging>
-    <version>3.0.0-SNAPSHOT</version>
+    <version>3.0.0</version>
     <name>WSO2 Business Activity Monitor</name>
     <url>http://wso2.org/projects/bam</url>
     <description>WSO2 Business Activity Monitor</description>
@@ -259,7 +258,7 @@
         <url>https://github.com/wso2/product-bam.git</url>
         <developerConnection>scm:git:https://github.com/wso2/product-bam.git</developerConnection>
         <connection>scm:git:https://github.com/wso2/product-bam.git</connection>
-        <tag>HEAD</tag>
+        <tag>wso2bam-3.0.0-M0</tag>
     </scm>
 
     <profiles>
@@ -317,7 +316,7 @@
         <carbon.event-processing.version>2.0.2</carbon.event-processing.version>
 
         <carbon.analytics.version>1.0.1</carbon.analytics.version>
-        <bam.release.version>3.0.0-SNAPSHOT</bam.release.version>
+        <bam.release.version>3.0.0</bam.release.version>
 
         <project.scm.id>my-scm-server</project.scm.id>
     </properties>
