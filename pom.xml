@@ -20,7 +20,7 @@
     <groupId>org.wso2.bam</groupId>
     <artifactId>wso2bam-parent</artifactId>
     <packaging>pom</packaging>
-    <version>3.0.0</version>
+    <version>3.0.1-SNAPSHOT</version>
     <name>WSO2 Business Activity Monitor</name>
     <url>http://wso2.org/projects/bam</url>
     <description>WSO2 Business Activity Monitor</description>
@@ -258,7 +258,7 @@
         <url>https://github.com/wso2/product-bam.git</url>
         <developerConnection>scm:git:https://github.com/wso2/product-bam.git</developerConnection>
         <connection>scm:git:https://github.com/wso2/product-bam.git</connection>
-        <tag>wso2bam-3.0.0-M0</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <profiles>
@@ -316,7 +316,7 @@
         <carbon.event-processing.version>2.0.2</carbon.event-processing.version>
 
         <carbon.analytics.version>1.0.1</carbon.analytics.version>
-        <bam.release.version>3.0.0</bam.release.version>
+        <bam.release.version>3.0.1-SNAPSHOT</bam.release.version>
 
         <project.scm.id>my-scm-server</project.scm.id>
     </properties>
