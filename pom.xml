@@ -189,6 +189,11 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
+                <groupId>org.wso2.carbon.automation</groupId>
+                <artifactId>org.wso2.carbon.automation.core</artifactId>
+                <version>${carbon.automationcore.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.wso2.carbon.automationutils</groupId>
                 <artifactId>org.wso2.carbon.integration.common.extensions</artifactId>
                 <version>${carbon.automationutils.version}</version>
@@ -385,6 +390,7 @@
 
         <testng.version>6.1.1</testng.version>
         <carbon.automationutils.version>4.3.0</carbon.automationutils.version>
+        <carbon.automationcore.version>4.2.7</carbon.automationcore.version>
         <carbon.automation.version>4.3.1</carbon.automation.version>
         <carbon.registry.version>4.3.0</carbon.registry.version>
         <carbon.multitenancy.version>4.3.4</carbon.multitenancy.version>

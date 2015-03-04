@@ -13,9 +13,9 @@
 
 
     <test name="BAM-UI-tests" parallel="false" verbose="2">
-        <packages>
-            <package name="org.wso2.bam.ui.integration.test.*"/>
-        </packages>
+        <classes>
+            <class name="org.wso2.carbon.bam.ui.test.AddEventStreamTestCase"/>
+        </classes>
     </test>
 
 
