@@ -11,10 +11,9 @@
         <listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestTransformerListener"/>
     </listeners>
 
-
     <test name="BAM-UI-tests" parallel="false" verbose="2">
         <packages>
-            <package name="org.wso2.bam.ui.integration.test.*"/>
+            <package name="org.wso2.carbon.bam.ui.test.*"/>
         </packages>
     </test>
 
