@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<eventReceiver name="test_table_1" statistics="disable" trace="disable" xmlns="http://wso2.org/carbon/eventreceiver">
+<eventReceiver name="backupToolTestReceiver" statistics="disable" trace="disable" xmlns="http://wso2.org/carbon/eventreceiver">
     <from eventAdapterType="wso2event">
         <property name="events.duplicated.in.cluster">false</property>
     </from>
