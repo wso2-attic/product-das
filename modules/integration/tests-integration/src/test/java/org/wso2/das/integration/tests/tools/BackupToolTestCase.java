@@ -44,7 +44,7 @@ import java.io.IOException;
 public class BackupToolTestCase extends DASIntegrationTest{
     private static final String BACKUP_TOOL_STREAM_NAME = "backup.tool.persist.table";
     private static final String STREAM_VERSION = "1.0.0";
-    private static final int RECORD_COUNT = 1;
+    private static final int RECORD_COUNT = 100;
     //todo: change this path to have it inside the DAS deployment
     private static final String BACKUP_DIR_PATH = "/home/sachith/temp/test";
     private DataPublisherClient dataPublisherClient;

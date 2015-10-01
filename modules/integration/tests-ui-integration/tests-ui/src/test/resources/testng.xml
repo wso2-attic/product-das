@@ -4,11 +4,11 @@
     <parameter name="useDefaultListeners" value="false"/>
 
     <listeners>
-        <listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestExecutionListener"/>
-        <listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestSuiteListener"/>
-        <listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestManagerListener"/>
-        <listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestReportListener"/>
-        <listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestTransformerListener"/>
+        <!--<listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestExecutionListener"/>-->
+        <!--<listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestSuiteListener"/>-->
+        <!--<listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestManagerListener"/>-->
+        <!--<listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestReportListener"/>-->
+        <!--<listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestTransformerListener"/>-->
     </listeners>
 
 
