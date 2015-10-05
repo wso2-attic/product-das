@@ -40,6 +40,7 @@ import org.wso2.das.integration.common.utils.DASIntegrationTest;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 
 public class BackupToolTestCase extends DASIntegrationTest{
     private static final String BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME = "backup.tool.persist.table";
@@ -49,6 +50,7 @@ public class BackupToolTestCase extends DASIntegrationTest{
     private static final int MAX_TRIES = 5;
     //todo: change this path to have it inside the DAS deployment
     private static final String BACKUP_DIR_PATH = "/home/sachith/temp/test";
+    private static final String BACKUP_INDEX_PATH = "/home/sachith/temp/index";
     private DataPublisherClient dataPublisherClient;
     private AnalyticsWebServiceClient webServiceClient;
     private EventStreamPersistenceClient persistenceClient;
@@ -116,25 +118,28 @@ public class BackupToolTestCase extends DASIntegrationTest{
         Assert.assertTrue(new File(backedUpRecordStorePath).exists(), "Backing up table has failed.");
     }
 
+    @Test(groups = "wso2.das.backupTool", description = "Test the filesystem backing up", dependsOnMethods = "checkDataPersistence")
+    public void testBackupFileSystem() throws Exception {
+        backupFileSystem();
+        String backedUpFileSystemPath = BACKUP_INDEX_PATH + File.separator + "_data";
+        Assert.assertTrue(new File(backedUpFileSystemPath).exists(), "Backing up the filesystem has failed.");
+    }
+
     @Test(groups = "wso2.das.backupTool", description = "Check Record Store restoring", dependsOnMethods = "testBackupFileSystem")
     public void testRestoreRecordStore() throws Exception {
         purgeData();
         restoreRecordStore();
-        RecordBean[] recods = webServiceClient.getByRange(BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME.replace('.', '_'), Long.MIN_VALUE + 1, Long.MAX_VALUE, 0, 1000);
-        long count = recods.length;
+        RecordBean[] records = webServiceClient.getByRange(BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME.replace('.', '_'), Long.MIN_VALUE + 1, Long.MAX_VALUE, 0, RECORD_COUNT*5);
+        long count = records.length;
         Assert.assertEquals(count, RECORD_COUNT, "Restoring of records of " + BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME + " has failed.");
-    }
-
-    @Test(groups = "wso2.das.backupTool", description = "Test the filesystem backing up", dependsOnMethods = "checkDataPersistence")
-    public void testBackupFileSystem() throws Exception {
-        backupFileSystem();
-        String backedUpFileSystemPath = BACKUP_DIR_PATH + File.separator + "_data";
-        Assert.assertTrue(new File(backedUpFileSystemPath).exists(), "Backing up the filesystem has failed.");
     }
 
     @Test(groups = "wso2.das.backupTool", description = "Check Record Store restoring", dependsOnMethods = "testRestoreRecordStore")
     public void testRestoreFileSystem() throws Exception {
         restoreFileSystem();
+        RecordBean[] results = webServiceClient.search(BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME.replace('.', '_'), "*:*", 0, RECORD_COUNT + 2);
+        int resultLength = results.length;
+        Assert.assertEquals(resultLength, RECORD_COUNT, "The filesystem restoring failed!!");
     }
 
     private AnalyticsTable getAnalyticsTable() {
@@ -196,7 +201,7 @@ public class BackupToolTestCase extends DASIntegrationTest{
     }
 
     private void publishEvents(long id, String name, int record_count) throws Exception {
-        Event event = null;
+        Event event;
         dataPublisherClient = new DataPublisherClient();
         for (int i = 0; i < record_count; i++) {
             event = new Event(null, System.currentTimeMillis(), new Object[0], new Object[0], new Object[]{id, name});
@@ -225,7 +230,7 @@ public class BackupToolTestCase extends DASIntegrationTest{
         String filePath = getExecutableScript();
 
         ProcessBuilder pb = new ProcessBuilder(filePath, "-restoreRecordStore", "-tenantId", "-1234", "-disableStaging",
-                "-dir", BACKUP_DIR_PATH + File.separator + BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME.replace('.','_'));
+                "-dir", BACKUP_DIR_PATH);
         Process p = pb.start();
 
         //wait for the backup to execute
@@ -236,7 +241,7 @@ public class BackupToolTestCase extends DASIntegrationTest{
     private void backupFileSystem() throws IOException, InterruptedException {
         String filePath = getExecutableScript();
 
-        ProcessBuilder pb = new ProcessBuilder(filePath, "-backupFileSystem", "-tenantId", "-1234", "-dir", BACKUP_DIR_PATH);
+        ProcessBuilder pb = new ProcessBuilder(filePath, "-backupFileSystem", "-tenantId", "-1234", "-dir", BACKUP_INDEX_PATH);
         Process p = pb.start();
 
         //wait for the backup to execute
@@ -248,7 +253,7 @@ public class BackupToolTestCase extends DASIntegrationTest{
         String filePath = getExecutableScript();
 
         ProcessBuilder pb = new ProcessBuilder(filePath, "-restoreFileSystem", "-tenantId", "-1234",
-                "-dir", BACKUP_DIR_PATH);
+                "-dir", BACKUP_INDEX_PATH);
         Process p = pb.start();
 
         //wait for the backup to execute
@@ -269,7 +274,13 @@ public class BackupToolTestCase extends DASIntegrationTest{
     }
 
     private void purgeData() throws Exception {
-        messageConsoleClient.scheduleDataPurgingTask(BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME.replace('.', '_'), "10 * * * * ?", -1);
+        Date date = new Date();
+        String cronExpressionNow = generateCronExpressionNow(Integer.toString(date.getSeconds()), Integer.toString(date.getMinutes()), Integer.toString(date.getHours()));
+        messageConsoleClient.scheduleDataPurgingTask(BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME.replace('.', '_'), cronExpressionNow, -1);
         Thread.sleep(10000);
+    }
+
+    private String generateCronExpressionNow(final String seconds,final String minutes, final String hours) {
+        return String.format("%1$s %2$s %3$s * * ?",seconds, minutes, hours);
     }
 }
