@@ -84,7 +84,6 @@ public class BackupToolTestCase extends DASIntegrationTest{
 
     @Test(groups = "wso2.das.backupTool", description = "Test backend availability of persistence service")
     public void testBackendAvailability() throws Exception {
-        init();
         Assert.assertTrue(persistenceClient.isBackendServicePresent(), "The persistence service is unavailable");
     }
 
