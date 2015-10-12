@@ -17,7 +17,9 @@
 */
 package org.wso2.das.integration.tests.tools;
 
+import org.apache.commons.io.FileUtils;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.carbon.analytics.api.AnalyticsDataAPI;
@@ -74,6 +76,12 @@ public class BackupToolTestCase extends DASIntegrationTest{
         BACKUP_INDEX_PATH = FrameworkPathUtil.getCarbonHome() + File.separator + "test" + File.separator + "backupToolTestCase" +
                 File.separator + "indexBackup";
     }
+
+    @AfterClass(alwaysRun = true)
+    protected void cleanServer() throws IOException {
+        FileUtils.deleteDirectory(new File(FrameworkPathUtil.getCarbonHome() + File.separator + "test"));
+    }
+
     @Test(groups = "wso2.das.backupTool", description = "Test backend availability of persistence service")
     public void testBackendAvailability() throws Exception {
         init();
@@ -195,7 +203,7 @@ public class BackupToolTestCase extends DASIntegrationTest{
         int tries = 0;
         while (true) {
             Thread.sleep(10000);
-            records = webServiceClient.search(BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME.replace('.', '_'), "*:*", 0, RECORD_COUNT*2);
+            records = webServiceClient.search(BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME.replace('.', '_'), "*:*", 0, RECORD_COUNT * 2);
             if (records != null) {
                 if(records.length > 0) {
                     break;
@@ -209,6 +217,10 @@ public class BackupToolTestCase extends DASIntegrationTest{
         Assert.assertEquals(records.length, RECORD_COUNT, "Restoring the filesystem has failed!");
     }
 
+    /**
+     * Generates the analytics Table for the recordstore.
+     * @return AnalyticsTable
+     */
     private AnalyticsTable getAnalyticsTable() {
         AnalyticsTable table = new AnalyticsTable();
         table.setPersist(true);
@@ -243,6 +255,10 @@ public class BackupToolTestCase extends DASIntegrationTest{
         return table;
     }
 
+    /**
+     * generates the Stream definition.
+     * @return StreamDefinition
+     */
     private StreamDefinitionBean getEventStreamBean() {
         StreamDefinitionBean definitionBean = new StreamDefinitionBean();
         definitionBean.setName(BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME);
@@ -260,6 +276,10 @@ public class BackupToolTestCase extends DASIntegrationTest{
         return definitionBean;
     }
 
+    /**
+     * Deploys the event receivers for the test stream.
+     * @throws IOException
+     */
     private void deployEventReceivers() throws IOException {
         String streamResourceDir = FrameworkPathUtil.getSystemResourceLocation() + "tools" + File.separator;
         String streamsLocation = FrameworkPathUtil.getCarbonHome() + File.separator + "repository"
@@ -267,6 +287,13 @@ public class BackupToolTestCase extends DASIntegrationTest{
         FileManager.copyResourceToFileSystem(streamResourceDir + "backupToolTable.xml", streamsLocation, "backupToolTable.xml");
     }
 
+    /**
+     * Publishes a given number of events.
+     * @param id
+     * @param name
+     * @param record_count
+     * @throws Exception
+     */
     private void publishEvents(long id, String name, int record_count) throws Exception {
         Event event;
         dataPublisherClient = new DataPublisherClient();
@@ -274,16 +301,19 @@ public class BackupToolTestCase extends DASIntegrationTest{
             event = new Event(null, System.currentTimeMillis(), new Object[0], new Object[0], new Object[]{id, name});
             dataPublisherClient.publish(BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME, STREAM_VERSION, event);
         }
-        //fixme : is there anyway to reduce this?
         Thread.sleep(10000);
         dataPublisherClient.shutdown();
         analyticsDataAPI.waitForIndexing(MultitenantConstants.SUPER_TENANT_ID, BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME.replace('.', '_').toUpperCase(), 10000L);
     }
 
+    /**
+     * Backs up all the records in the record store.
+     * @throws IOException
+     * @throws InterruptedException
+     */
     private void backupRecordStore() throws IOException, InterruptedException {
         String filePath = getExecutableScript();
 
-        //todo: make super tenant ID get from the multitenant constants
         ProcessBuilder pb = new ProcessBuilder(filePath, "-backupRecordStore", "-tenantId", "-1234", "-tables", BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME.replace('.', '_'),
                 "-dir", BACKUP_DIR_PATH);
         Process p = pb.start();
@@ -293,6 +323,11 @@ public class BackupToolTestCase extends DASIntegrationTest{
         p.destroy();
     }
 
+    /**
+     * Restore all the records from the backed up record store.
+     * @throws IOException
+     * @throws InterruptedException
+     */
     private void restoreRecordStore() throws IOException, InterruptedException {
         String filePath = getExecutableScript();
 
@@ -305,6 +340,11 @@ public class BackupToolTestCase extends DASIntegrationTest{
         p.destroy();
     }
 
+    /**
+     * Backs up the file system.
+     * @throws IOException
+     * @throws InterruptedException
+     */
     private void backupFileSystem() throws IOException, InterruptedException {
         String filePath = getExecutableScript();
         ProcessBuilder pb = new ProcessBuilder(filePath, "-backupFileSystem", "-tenantId", "-1234", "-dir", BACKUP_INDEX_PATH);
@@ -314,6 +354,12 @@ public class BackupToolTestCase extends DASIntegrationTest{
         p.waitFor();
         p.destroy();
     }
+
+    /**
+     * Restores the file system.
+     * @throws IOException
+     * @throws InterruptedException
+     */
     private void restoreFileSystem() throws IOException, InterruptedException {
         String filePath = getExecutableScript();
         ProcessBuilder pb = new ProcessBuilder(filePath, "-restoreFileSystem", "-tenantId", "-1234",
@@ -325,6 +371,10 @@ public class BackupToolTestCase extends DASIntegrationTest{
         p.destroy();
     }
 
+    /**
+     * Returns the executable analytics-backup.sh.
+     * @return
+     */
     private String getExecutableScript() {
         String filePath = getBackupScriptPath();
         //setting file permission to execute the script
@@ -334,10 +384,21 @@ public class BackupToolTestCase extends DASIntegrationTest{
         return filePath;
     }
 
+    /**
+     * Returns the path of the analytics-backup.sh.
+     * @return
+     */
     private String getBackupScriptPath() {
         return FrameworkPathUtil.getCarbonHome() + File.separator + "bin" + File.separator + "analytics-backup.sh";
     }
 
+    /**
+     * Generates the cron expression for the current timestamp.
+     * @param seconds
+     * @param minutes
+     * @param hours
+     * @return
+     */
     private String generateCronExpressionNow(final String seconds,final String minutes, final String hours) {
         return String.format("%1$s %2$s %3$s * * ?",seconds, minutes, hours);
     }
