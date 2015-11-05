@@ -44,7 +44,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
-public class BackupToolTestCase extends DASIntegrationTest{
+/**
+ * This is the Backup tool test case.
+ * Tests
+ *  - Backing up and restoring the recordstore.
+ *  - Backing up and restoring the filesystem.
+ */
+public class BackupToolTestCase extends DASIntegrationTest {
     private static final String BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME = "backup.tool.persist.table";
     private static final String STREAM_VERSION = "1.0.0";
     private static final int RECORD_COUNT = 100;
@@ -58,72 +64,80 @@ public class BackupToolTestCase extends DASIntegrationTest{
     private MessageConsoleClient messageConsoleClient;
     private AnalyticsDataAPI analyticsDataAPI;
 
-    @BeforeClass(alwaysRun = true, dependsOnGroups = "wso2.das")
-    protected void init() throws Exception {
+    @BeforeClass(alwaysRun = true, dependsOnGroups = "wso2.das") protected void init() throws Exception {
         super.init();
         String session = getSessionCookie();
         messageConsoleClient = new MessageConsoleClient(backendURL, session);
         webServiceClient = new AnalyticsWebServiceClient(backendURL, session);
         persistenceClient = new EventStreamPersistenceClient(backendURL, session);
-        String apiConf =
-                new File(this.getClass().getClassLoader().
-                        getResource("dasconfig" + File.separator + "api" + File.separator + "analytics-data-config.xml").toURI())
-                        .getAbsolutePath();
+        String apiConf = new File(this.getClass().getClassLoader().
+                getResource("dasconfig" + File.separator + "api" + File.separator + "analytics-data-config.xml")
+                .toURI()).getAbsolutePath();
         analyticsDataAPI = new CarbonAnalyticsAPI(apiConf);
         analyticsDataAPI.deleteTable(-1234, BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME.replace('.', '_'));
-        BACKUP_DIR_PATH = FrameworkPathUtil.getCarbonHome() + File.separator + "test" + File.separator + "backupToolTestCase" +
-                File.separator + "recordStoreBackup";
-        BACKUP_INDEX_PATH = FrameworkPathUtil.getCarbonHome() + File.separator + "test" + File.separator + "backupToolTestCase" +
-                File.separator + "indexBackup";
+        BACKUP_DIR_PATH =
+                FrameworkPathUtil.getCarbonHome() + File.separator + "test" + File.separator + "backupToolTestCase" +
+                        File.separator + "recordStoreBackup";
+        BACKUP_INDEX_PATH =
+                FrameworkPathUtil.getCarbonHome() + File.separator + "test" + File.separator + "backupToolTestCase" +
+                        File.separator + "indexBackup";
     }
 
-    @AfterClass(alwaysRun = true)
-    protected void cleanServer() throws IOException {
+    @AfterClass(alwaysRun = true) protected void cleanServer() throws IOException {
         FileUtils.deleteDirectory(new File(FrameworkPathUtil.getCarbonHome() + File.separator + "test"));
     }
 
-    @Test(groups = "wso2.das.backupTool", description = "Test backend availability of persistence service")
-    public void testBackendAvailability() throws Exception {
+    @Test(groups = "wso2.das.backupTool", description = "Test backend availability of persistence service") public void testBackendAvailability()
+            throws Exception {
         Assert.assertTrue(persistenceClient.isBackendServicePresent(), "The persistence service is unavailable");
     }
 
-    @Test(groups = "wso2.das.backupTool", description = "Adding the new analytics table", dependsOnMethods = "testBackendAvailability")
-    public void addAnalyticsTable() throws Exception {
+    @Test(groups = "wso2.das.backupTool", description = "Adding the new analytics table", dependsOnMethods = "testBackendAvailability") public void addAnalyticsTable()
+            throws Exception {
         StreamDefinitionBean streamDefinition = getEventStreamBean();
         webServiceClient.addStreamDefinition(streamDefinition);
         AnalyticsTable analyticsTable = getAnalyticsTable();
         persistenceClient.addAnalyticsTable(analyticsTable);
-
         int tries = 0;
-        AnalyticsTable persistedTable = persistenceClient.getAnalyticsTable(BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME, STREAM_VERSION);
+        AnalyticsTable persistedTable = persistenceClient.getAnalyticsTable(BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME,
+                STREAM_VERSION);
         while (persistedTable == null) {
             Thread.sleep(3000);
             tries++;
-            if(tries == MAX_TRIES)
-                Assert.fail("Could not persist the analytics table: " + BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME.replace('.','_'));
-            persistedTable = persistenceClient.getAnalyticsTable(BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME, STREAM_VERSION);
+            if (tries == MAX_TRIES) {
+                Assert.fail("Could not persist the analytics table: " + BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME
+                        .replace('.', '_'));
+            }
+            persistedTable = persistenceClient
+                    .getAnalyticsTable(BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME, STREAM_VERSION);
         }
     }
 
     @Test(groups = "wso2.das.backupTool", description = "Check event stream persistence", dependsOnMethods = "addAnalyticsTable")
-    public void checkDataPersistence() throws Exception {
+    public void checkDataPersistence()
+            throws Exception {
         deployEventReceivers();
         Thread.sleep(20000);
         publishEvents(1, "Test Event 1", RECORD_COUNT);
-        RecordBean[] records = webServiceClient.getByRange(BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME.replace('.', '_'), Long.MIN_VALUE + 1, Long.MAX_VALUE, 0, 1000);
+        RecordBean[] records = webServiceClient
+                .getByRange(BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME.replace('.', '_'), Long.MIN_VALUE + 1,
+                        Long.MAX_VALUE, 0, 1000);
         long count = records.length;
         Assert.assertEquals(count, RECORD_COUNT, "Record count is invalid");
     }
 
     @Test(groups = "wso2.das.backupTool", description = "Check Record Store backing up", dependsOnMethods = "checkDataPersistence")
-    public void testBackupRecordStore() throws Exception {
+    public void testBackupRecordStore()
+            throws Exception {
         backupRecordStore();
-        String backedUpRecordStorePath = BACKUP_DIR_PATH + File.separator + BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME.replace('.', '_');
+        String backedUpRecordStorePath =
+                BACKUP_DIR_PATH + File.separator + BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME.replace('.', '_');
         Assert.assertTrue(new File(backedUpRecordStorePath).exists(), "Backing up table has failed.");
     }
 
     @Test(groups = "wso2.das.backupTool", description = "Test the filesystem backing up", dependsOnMethods = "checkDataPersistence")
-    public void testBackupFileSystem() throws Exception {
+    public void testBackupFileSystem()
+            throws Exception {
         backupFileSystem();
         String backedUpFileSystemPath = BACKUP_INDEX_PATH + File.separator + "_data";
         Assert.assertTrue(new File(backedUpFileSystemPath).exists(), "Backing up the filesystem has failed.");
@@ -131,95 +145,105 @@ public class BackupToolTestCase extends DASIntegrationTest{
         int tries = 0;
         while (true) {
             Thread.sleep(15000);
-            records = webServiceClient.search(BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME.replace('.', '_'), "*:*", 0, RECORD_COUNT*2);
+            records = webServiceClient
+                    .search(BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME.replace('.', '_'), "*:*", 0, RECORD_COUNT * 2);
             if (records != null) {
-                if(records.length > 0) {
+                if (records.length > 0) {
                     break;
                 }
             }
             tries++;
-            if(tries == MAX_TRIES) {
+            if (tries == MAX_TRIES) {
                 Assert.fail("Restoring of the filesystem has failed!");
             }
         }
         Assert.assertEquals(records.length, RECORD_COUNT, "Restoring the filesystem has failed!");
     }
 
-    @Test(groups = "wso2.das.backupTool", description = "Test Data Purging", dependsOnMethods = {"testBackupRecordStore", "testBackupFileSystem"})
+    @Test(groups = "wso2.das.backupTool", description = "Test Data Purging", dependsOnMethods = {
+            "testBackupRecordStore", "testBackupFileSystem" })
     public void testPurgeData() throws Exception {
         Date date = new Date();
-        String cronExpressionNow = generateCronExpressionNow(Integer.toString(date.getSeconds()), Integer.toString(date.getMinutes()), Integer.toString(date.getHours()));
-        messageConsoleClient.scheduleDataPurgingTask(BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME.replace('.', '_'), cronExpressionNow, -1);
+        String cronExpressionNow = generateCronExpressionNow(Integer.toString(date.getSeconds()),
+                Integer.toString(date.getMinutes()), Integer.toString(date.getHours()));
+        messageConsoleClient
+                .scheduleDataPurgingTask(BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME.replace('.', '_'), cronExpressionNow,
+                        -1);
         RecordBean[] records;
         int tries = 0;
         while (true) {
             Thread.sleep(10000);
-            records = webServiceClient.search(BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME.replace('.', '_'), "*:*", 0, RECORD_COUNT * 2);
-            if (records == null || records.length <= 0)
+            records = webServiceClient
+                    .search(BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME.replace('.', '_'), "*:*", 0, RECORD_COUNT * 2);
+            if (records == null || records.length <= 0) {
                 break;
+            }
             tries++;
-            if(tries == MAX_TRIES) {
+            if (tries == MAX_TRIES) {
                 Assert.fail("Purging of the data has failed!");
             }
         }
         while (true) {
             Thread.sleep(10000);
-            records = webServiceClient.search(BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME.replace('.', '_'), "*:*", 0, RECORD_COUNT * 2);
+            records = webServiceClient
+                    .search(BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME.replace('.', '_'), "*:*", 0, RECORD_COUNT * 2);
             if (records == null || records.length <= 0)
                 break;
             tries++;
-            if(tries == MAX_TRIES) {
+            if (tries == MAX_TRIES) {
                 Assert.fail("Purging of the data has failed!");
             }
         }
     }
 
     @Test(groups = "wso2.das.backupTool", description = "Check Record Store restoring", dependsOnMethods = "testPurgeData")
-    public void testRestoreRecordStore() throws Exception {
+    public void testRestoreRecordStore()
+            throws Exception {
         restoreRecordStore();
         int tries = 0;
         RecordBean[] records;
         while (true) {
             Thread.sleep(10000);
-            records = webServiceClient.getByRange(BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME.replace('.', '_'), Long.MIN_VALUE + 1, Long.MAX_VALUE, 0, RECORD_COUNT * 5);
+            records = webServiceClient
+                    .getByRange(BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME.replace('.', '_'), Long.MIN_VALUE + 1,
+                            Long.MAX_VALUE, 0, RECORD_COUNT * 5);
             if (records != null) {
-                if(records.length > 0){
+                if (records.length > 0) {
                     break;
                 }
             }
             tries++;
-            if(tries == MAX_TRIES) {
+            if (tries == MAX_TRIES) {
                 Assert.fail("Restoring of records for the table failed!");
             }
         }
-        Assert.assertEquals(records.length, RECORD_COUNT, "Restoring of records of " + BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME + " has failed.");
+        Assert.assertEquals(records.length, RECORD_COUNT,
+                "Restoring of records of " + BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME + " has failed.");
     }
 
     @Test(groups = "wso2.das.backupTool", description = "Check the filesystem restoring", dependsOnMethods = "testRestoreRecordStore")
-    public void testRestoreFileSystem() throws Exception {
+    public void testRestoreFileSystem()
+            throws Exception {
         restoreFileSystem();
         RecordBean[] records;
         int tries = 0;
         while (true) {
             Thread.sleep(10000);
-            records = webServiceClient.search(BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME.replace('.', '_'), "*:*", 0, RECORD_COUNT * 2);
+            records = webServiceClient
+                    .search(BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME.replace('.', '_'), "*:*", 0, RECORD_COUNT * 2);
             if (records != null) {
-                if(records.length > 0) {
+                if (records.length > 0) {
                     break;
                 }
             }
             tries++;
-            if(tries == MAX_TRIES) {
+            if (tries == MAX_TRIES) {
                 Assert.fail("Restoring of the filesystem has failed!");
             }
         }
         Assert.assertEquals(records.length, RECORD_COUNT, "Restoring the filesystem has failed!");
     }
 
-    /**
-     * Generates the analytics Table for the recordstore.
-     * @return AnalyticsTable
-     */
     private AnalyticsTable getAnalyticsTable() {
         AnalyticsTable table = new AnalyticsTable();
         table.setPersist(true);
@@ -254,10 +278,6 @@ public class BackupToolTestCase extends DASIntegrationTest{
         return table;
     }
 
-    /**
-     * generates the Stream definition.
-     * @return StreamDefinition
-     */
     private StreamDefinitionBean getEventStreamBean() {
         StreamDefinitionBean definitionBean = new StreamDefinitionBean();
         definitionBean.setName(BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME);
@@ -275,130 +295,85 @@ public class BackupToolTestCase extends DASIntegrationTest{
         return definitionBean;
     }
 
-    /**
-     * Deploys the event receivers for the test stream.
-     * @throws IOException
-     */
     private void deployEventReceivers() throws IOException {
         String streamResourceDir = FrameworkPathUtil.getSystemResourceLocation() + "tools" + File.separator;
-        String streamsLocation = FrameworkPathUtil.getCarbonHome() + File.separator + "repository"
-                + File.separator + "deployment" + File.separator + "server" + File.separator + "eventreceivers" + File.separator;
-        FileManager.copyResourceToFileSystem(streamResourceDir + "backupToolTable.xml", streamsLocation, "backupToolTable.xml");
+        String streamsLocation =
+                FrameworkPathUtil.getCarbonHome() + File.separator + "repository" + File.separator + "deployment"
+                        + File.separator + "server" + File.separator + "eventreceivers" + File.separator;
+        FileManager.copyResourceToFileSystem(streamResourceDir + "backupToolTable.xml", streamsLocation,
+                "backupToolTable.xml");
     }
 
-    /**
-     * Publishes a given number of events.
-     * @param id
-     * @param name
-     * @param record_count
-     * @throws Exception
-     */
     private void publishEvents(long id, String name, int record_count) throws Exception {
         Event event;
         dataPublisherClient = new DataPublisherClient();
         for (int i = 0; i < record_count; i++) {
-            event = new Event(null, System.currentTimeMillis(), new Object[0], new Object[0], new Object[]{id, name});
+            event = new Event(null, System.currentTimeMillis(), new Object[0], new Object[0],
+                    new Object[] { id, name });
             dataPublisherClient.publish(BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME, STREAM_VERSION, event);
         }
-        Thread.sleep(10000);
         dataPublisherClient.shutdown();
-        analyticsDataAPI.waitForIndexing(MultitenantConstants.SUPER_TENANT_ID, BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME.replace('.', '_').toUpperCase(), 10000L);
+        analyticsDataAPI.waitForIndexing(MultitenantConstants.SUPER_TENANT_ID,
+                BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME.replace('.', '_').toUpperCase(), 10000L);
     }
 
-    /**
-     * Backs up all the records in the record store.
-     * @throws IOException
-     * @throws InterruptedException
-     */
     private void backupRecordStore() throws IOException, InterruptedException {
         String filePath = getExecutableScript();
 
-        ProcessBuilder pb = new ProcessBuilder(filePath, "-backupRecordStore", "-tenantId", "-1234", "-tables", BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME.replace('.', '_'),
-                "-dir", BACKUP_DIR_PATH);
+        ProcessBuilder pb = new ProcessBuilder(filePath, "-backupRecordStore", "-tenantId", "-1234", "-tables",
+                BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME.replace('.', '_'), "-dir", BACKUP_DIR_PATH);
         Process p = pb.start();
-
         //wait for the backup to execute
         p.waitFor();
         p.destroy();
     }
 
-    /**
-     * Restore all the records from the backed up record store.
-     * @throws IOException
-     * @throws InterruptedException
-     */
     private void restoreRecordStore() throws IOException, InterruptedException {
         String filePath = getExecutableScript();
 
-        ProcessBuilder pb = new ProcessBuilder(filePath, "-restoreRecordStore", "-tenantId", "-1234",
-                "-dir", BACKUP_DIR_PATH);
+        ProcessBuilder pb = new ProcessBuilder(filePath, "-restoreRecordStore", "-tenantId", "-1234", "-dir",
+                BACKUP_DIR_PATH);
         Process p = pb.start();
-
         //wait for the backup to execute
         p.waitFor();
         p.destroy();
     }
 
-    /**
-     * Backs up the file system.
-     * @throws IOException
-     * @throws InterruptedException
-     */
     private void backupFileSystem() throws IOException, InterruptedException {
         String filePath = getExecutableScript();
-        ProcessBuilder pb = new ProcessBuilder(filePath, "-backupFileSystem", "-tenantId", "-1234", "-dir", BACKUP_INDEX_PATH);
+        ProcessBuilder pb = new ProcessBuilder(filePath, "-backupFileSystem", "-tenantId", "-1234", "-dir",
+                BACKUP_INDEX_PATH);
         Process p = pb.start();
-
         //wait for the backup to execute
         p.waitFor();
         p.destroy();
     }
 
-    /**
-     * Restores the file system.
-     * @throws IOException
-     * @throws InterruptedException
-     */
     private void restoreFileSystem() throws IOException, InterruptedException {
         String filePath = getExecutableScript();
-        ProcessBuilder pb = new ProcessBuilder(filePath, "-restoreFileSystem", "-tenantId", "-1234",
-                "-dir", BACKUP_INDEX_PATH + File.separator + "_data");
+        ProcessBuilder pb = new ProcessBuilder(filePath, "-restoreFileSystem", "-tenantId", "-1234", "-dir",
+                BACKUP_INDEX_PATH + File.separator + "_data");
         Process p = pb.start();
-
         //wait for the backup to execute
         p.waitFor();
         p.destroy();
     }
 
-    /**
-     * Returns the executable analytics-backup.sh.
-     * @return
-     */
     private String getExecutableScript() {
         String filePath = getBackupScriptPath();
         //setting file permission to execute the script
         File backupToolScript = new File(filePath);
-        if (!backupToolScript.canExecute())
+        if (!backupToolScript.canExecute()) {
             backupToolScript.setExecutable(true);
+        }
         return filePath;
     }
 
-    /**
-     * Returns the path of the analytics-backup.sh.
-     * @return
-     */
     private String getBackupScriptPath() {
         return FrameworkPathUtil.getCarbonHome() + File.separator + "bin" + File.separator + "analytics-backup.sh";
     }
 
-    /**
-     * Generates the cron expression for the current timestamp.
-     * @param seconds
-     * @param minutes
-     * @param hours
-     * @return
-     */
-    private String generateCronExpressionNow(final String seconds,final String minutes, final String hours) {
-        return String.format("%1$s %2$s %3$s * * ?",seconds, minutes, hours);
+    private String generateCronExpressionNow(final String seconds, final String minutes, final String hours) {
+        return String.format("%1$s %2$s %3$s * * ?", seconds, minutes, hours);
     }
 }
