@@ -64,7 +64,8 @@ public class BackupToolTestCase extends DASIntegrationTest {
     private MessageConsoleClient messageConsoleClient;
     private AnalyticsDataAPI analyticsDataAPI;
 
-    @BeforeClass(alwaysRun = true, dependsOnGroups = "wso2.das") protected void init() throws Exception {
+    @BeforeClass(alwaysRun = true, dependsOnGroups = "wso2.das")
+    protected void init() throws Exception {
         super.init();
         String session = getSessionCookie();
         messageConsoleClient = new MessageConsoleClient(backendURL, session);
@@ -83,16 +84,19 @@ public class BackupToolTestCase extends DASIntegrationTest {
                         File.separator + "indexBackup";
     }
 
-    @AfterClass(alwaysRun = true) protected void cleanServer() throws IOException {
+    @AfterClass(alwaysRun = true)
+    protected void cleanServer() throws IOException {
         FileUtils.deleteDirectory(new File(FrameworkPathUtil.getCarbonHome() + File.separator + "test"));
     }
 
-    @Test(groups = "wso2.das.backupTool", description = "Test backend availability of persistence service") public void testBackendAvailability()
+    @Test(groups = "wso2.das.backupTool", description = "Test backend availability of persistence service")
+    public void testBackendAvailability()
             throws Exception {
         Assert.assertTrue(persistenceClient.isBackendServicePresent(), "The persistence service is unavailable");
     }
 
-    @Test(groups = "wso2.das.backupTool", description = "Adding the new analytics table", dependsOnMethods = "testBackendAvailability") public void addAnalyticsTable()
+    @Test(groups = "wso2.das.backupTool", description = "Adding the new analytics table", dependsOnMethods = "testBackendAvailability")
+    public void addAnalyticsTable()
             throws Exception {
         StreamDefinitionBean streamDefinition = getEventStreamBean();
         webServiceClient.addStreamDefinition(streamDefinition);
