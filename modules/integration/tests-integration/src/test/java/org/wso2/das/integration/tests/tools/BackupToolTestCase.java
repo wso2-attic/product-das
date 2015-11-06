@@ -47,8 +47,8 @@ import java.util.Date;
 /**
  * This is the Backup tool test case.
  * Tests
- *  - Backing up and restoring the recordstore.
- *  - Backing up and restoring the filesystem.
+ * - Backing up and restoring the recordstore.
+ * - Backing up and restoring the filesystem.
  */
 public class BackupToolTestCase extends DASIntegrationTest {
     private static final String BACKUP_TOOL_RECORDSTORE_TEST_STREAM_NAME = "backup.tool.persist.table";
