@@ -352,6 +352,11 @@
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.analytics-common</groupId>
+                <artifactId>org.wso2.carbon.event.execution.manager.stub</artifactId>
+                <version>${carbon.analytics.common.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.analytics-common</groupId>
                 <artifactId>org.wso2.carbon.databridge.agent</artifactId>
                 <version>${carbon.analytics.common.version}</version>
             </dependency>
@@ -434,7 +439,7 @@
         <carbon.identity.version>5.0.7</carbon.identity.version>
         <carbon.commons.version>4.4.8</carbon.commons.version>
         <carbon.data.version>4.3.4</carbon.data.version>
-        <carbon.event-processing.version>2.0.12</carbon.event-processing.version>
+        <carbon.event-processing.version>2.0.13-SNAPSHOT</carbon.event-processing.version>
         <carbon.dashboard.version>1.0.9</carbon.dashboard.version>
         <carbon.metrics.version>1.2.0</carbon.metrics.version>
 
@@ -476,8 +481,8 @@
         <project.scm.id>my-scm-server</project.scm.id>
     </properties>
 
-    <pluginRepositories>
-        <pluginRepository>
+    <repositories>
+        <repository>
             <id>wso2.releases</id>
             <name>WSO2 internal Repository</name>
             <url>http://maven.wso2.org/nexus/content/repositories/releases/</url>
@@ -486,8 +491,8 @@
                 <updatePolicy>daily</updatePolicy>
                 <checksumPolicy>ignore</checksumPolicy>
             </releases>
-        </pluginRepository>
-        <pluginRepository>
+        </repository>
+        <repository>
             <id>wso2.snapshots</id>
             <name>Apache Snapshot Repository</name>
             <url>http://maven.wso2.org/nexus/content/repositories/snapshots/</url>
@@ -498,8 +503,8 @@
             <releases>
                 <enabled>false</enabled>
             </releases>
-        </pluginRepository>
-        <pluginRepository>
+        </repository>
+        <repository>
             <id>wso2-nexus</id>
             <name>WSO2 internal Repository</name>
             <url>http://maven.wso2.org/nexus/content/groups/wso2-public/</url>
@@ -508,8 +513,8 @@
                 <updatePolicy>daily</updatePolicy>
                 <checksumPolicy>ignore</checksumPolicy>
             </releases>
-        </pluginRepository>
-    </pluginRepositories>
+        </repository>
+    </repositories>
 
     <build>
         <extensions>
