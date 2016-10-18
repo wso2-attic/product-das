@@ -1,0 +1,78 @@
+<!--
+ ~ Copyright (c) 2005-2011, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ ~
+ ~ WSO2 Inc. licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~    http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied.  See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+ -->
+
+<!--
+    This is the configuration file for logging specific properties.
+-->
+
+<loggingConfig xmlns="http://wso2.org/projects/carbon/carbon.xml">
+	<isDataFromCassandra>true</isDataFromCassandra>
+	<deleteColFamily>true</deleteColFamily>	
+	<!--Set the BAM Event publisher host url which specifies the log location where the logs are hosted-->
+	<cassandraHost>localhost:9161</cassandraHost>
+	<userName>admin</userName>
+	<password>admin</password>
+	<cassandraConsistencyLevel>ONE</cassandraConsistencyLevel>
+        <cassandraAutoDiscovery enable="false" delay="1000"/>
+        <retryDownedHosts enable="true" queueSize="10"/>
+	<publisherURL>tcp://localhost:7612</publisherURL>
+	<publisherUser>admin</publisherUser>
+	<publisherPassword>admin</publisherPassword>
+	<!--Cron expression for daily 1:00 am Summary Generation-->
+	<cronExpression>0 0 1 ? * * *</cronExpression>  
+	<logDirectory>/home/usr/apache/logs/</logDirectory>
+	<tmpLogDirectory>/home/usr/temp/logs</tmpLogDirectory>
+	<hdfsConfig>hdfs://localhost:9000</hdfsConfig>
+        <archivedLogLocation>/stratos/archivedLogs/</archivedLogLocation>
+	<bamUserName>admin</bamUserName>
+	<bamPassword>admin</bamPassword>
+	<hiveQuery>
+	set logs_column_family = %s;
+	set file_path= %s;
+	drop table LogSummaryStats;
+
+	CREATE EXTERNAL TABLE IF NOT EXISTS LogSummaryStats (key STRING,
+		payload_tenantID STRING,payload_serverName STRING,
+		payload_appName STRING,payload_message STRING,
+		payload_stacktrace STRING,
+		payload_logger STRING,
+		payload_priority STRING,payload_logTime BIGINT) 
+		STORED BY 'org.apache.hadoop.hive.cassandra.CassandraStorageHandler' 
+		WITH SERDEPROPERTIES ( "cassandra.host" = %s,
+		"cassandra.port" = %s,"cassandra.ks.name" = %s,
+		"cassandra.ks.username" = %s,"cassandra.ks.password" = %s,
+		"cassandra.cf.name" = ${hiveconf:logs_column_family},
+		"cassandra.columns.mapping" = 
+		":key,payload_tenantID,
+		payload_serverName,payload_appName,payload_message,
+		payload_stacktrace,payload_logger,payload_priority,
+		payload_logTime" );
+	INSERT OVERWRITE DIRECTORY '${hiveconf:file_path}'  
+	select 
+	concat('TID: [',payload_tenantID,'] ',
+	'[',payload_serverName,'] '),
+	concat(' [',
+	(from_unixtime(cast(payload_logTime/1000 as BIGINT),'yyyy-MM-dd HH:mm:ss.SSS' )),'] ') as LogTime, 
+	concat(payload_priority, ' ',
+	'{',payload_logger,'}',	
+	' - ',payload_message,' ',
+	payload_appName,' ',
+	payload_stacktrace) from LogSummaryStats
+	ORDER BY LogTime;
+	</hiveQuery>
+</loggingConfig>
