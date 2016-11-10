@@ -65,6 +65,10 @@ public class DASIntegrationTest {
         return loginLogoutClient.login();
     }
 
+    protected String getSessionCookieForTenant(String userName, String password, String hostName) throws Exception {
+        return loginLogoutClient.login(userName,password,hostName);
+    }
+
     @SuppressWarnings("rawtypes")
     protected String getResourceContent(Class testClass, String resourcePath) throws Exception {
         String content = "";

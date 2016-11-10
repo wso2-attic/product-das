@@ -20,10 +20,12 @@ package org.wso2.das.integration.common.clients;
 import java.rmi.RemoteException;
 
 import org.apache.axis2.AxisFault;
+import org.apache.axis2.client.ServiceClient;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.event.receiver.stub.EventReceiverAdminServiceStub;
 import org.wso2.carbon.event.receiver.stub.types.EventReceiverConfigurationDto;
+import org.wso2.carbon.event.receiver.stub.types.EventReceiverConfigurationInfoDto;
 
 /**
  * This class represents a client to do event receiver artifact related actions.
@@ -46,9 +48,28 @@ public class EventReceiverClient {
             throw new AxisFault(msg, e);
         }
     }
-    
+
+    public ServiceClient _getServiceClient() {
+        return eventReceiverStub._getServiceClient();
+    }
+
     public EventReceiverConfigurationDto getActiveEventReceiver(String name) throws RemoteException {
         return this.eventReceiverStub.getActiveEventReceiverConfiguration(name);
+    }
+
+    public int getActiveEventReceiverCount()
+            throws RemoteException {
+        try {
+            EventReceiverConfigurationInfoDto[] configs = eventReceiverStub.getAllActiveEventReceiverConfigurations();
+            if (configs == null) {
+                return 0;
+            } else {
+                return configs.length;
+            }
+        } catch (RemoteException e) {
+            throw new RemoteException("RemoteException", e);
+        }
+
     }
     
     public void undeployEventReceiver(String name) throws RemoteException {

@@ -16,6 +16,9 @@
             <!--<package name="org.wso2.das.integration.tests.analytics.webservice"/>-->
             <!--<package name="org.wso2.das.integration.tests.jsapi.analytics"/>-->
             <!--<package name="org.wso2.das.integration.tests.portal"/>-->
+
+            <!-- Tenant eager loading test case was written assuming CARBON-16072 was fixed. Please keep the test case disabled until it is fixed in carbon level-->
+            <!--<package name="org.wso2.das.integration.tests.tenanteagerloading"/>-->
         </packages>
     </test>
     <!--<test name="remote-api-tests" preserve-order="true" parallel="false">-->
