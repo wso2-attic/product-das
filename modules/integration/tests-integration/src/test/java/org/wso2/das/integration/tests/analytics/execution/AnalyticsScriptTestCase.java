@@ -27,8 +27,8 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.carbon.analytics.api.AnalyticsDataAPI;
-import org.wso2.carbon.analytics.api.AnalyticsDataAPIUtil;
 import org.wso2.carbon.analytics.api.CarbonAnalyticsAPI;
+import org.wso2.carbon.analytics.dataservice.core.AnalyticsDataServiceUtils;
 import org.wso2.carbon.analytics.datasource.commons.Record;
 import org.wso2.carbon.analytics.spark.admin.stub.AnalyticsProcessorAdminServiceAnalyticsProcessorAdminExceptionException;
 import org.wso2.carbon.analytics.spark.admin.stub.AnalyticsProcessorAdminServiceStub;
@@ -46,7 +46,13 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.rmi.RemoteException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
 public class AnalyticsScriptTestCase extends DASIntegrationTest {
     private static final Log log = LogFactory.getLog(AnalyticsScriptTestCase.class);
@@ -254,10 +260,10 @@ public class AnalyticsScriptTestCase extends DASIntegrationTest {
         AnalyticsQueryResultDto[] resultArr = this.analyticsStub.execute(scriptContent);
         AnalyticsQueryResultDto result = resultArr[resultArr.length - 1];
         
-        List<Record> resp1 = AnalyticsDataAPIUtil.listRecords(this.analyticsDataAPI, this.analyticsDataAPI.get(1, GTA_STATS_TABLE, 1, null, Long.MIN_VALUE, Long.MAX_VALUE, 0, -1));
-        List<Record> resp2 = AnalyticsDataAPIUtil.listRecords(this.analyticsDataAPI, this.analyticsDataAPI.get(2, GTA_STATS_TABLE, 1, null, Long.MIN_VALUE, Long.MAX_VALUE, 0, -1));
-        List<Record> resp3 = AnalyticsDataAPIUtil.listRecords(this.analyticsDataAPI, this.analyticsDataAPI.get(1, GTA_STATS_SUMMARY_TABLE, 1, null, Long.MIN_VALUE, Long.MAX_VALUE, 0, -1));
-        List<Record> resp4 = AnalyticsDataAPIUtil.listRecords(this.analyticsDataAPI, this.analyticsDataAPI.get(2, GTA_STATS_SUMMARY_TABLE, 1, null, Long.MIN_VALUE, Long.MAX_VALUE, 0, -1));
+        List<Record> resp1 = AnalyticsDataServiceUtils.listRecords(this.analyticsDataAPI, this.analyticsDataAPI.get(1, GTA_STATS_TABLE, 1, null, Long.MIN_VALUE, Long.MAX_VALUE, 0, -1));
+        List<Record> resp2 = AnalyticsDataServiceUtils.listRecords(this.analyticsDataAPI, this.analyticsDataAPI.get(2, GTA_STATS_TABLE, 1, null, Long.MIN_VALUE, Long.MAX_VALUE, 0, -1));
+        List<Record> resp3 = AnalyticsDataServiceUtils.listRecords(this.analyticsDataAPI, this.analyticsDataAPI.get(1, GTA_STATS_SUMMARY_TABLE, 1, null, Long.MIN_VALUE, Long.MAX_VALUE, 0, -1));
+        List<Record> resp4 = AnalyticsDataServiceUtils.listRecords(this.analyticsDataAPI, this.analyticsDataAPI.get(2, GTA_STATS_SUMMARY_TABLE, 1, null, Long.MIN_VALUE, Long.MAX_VALUE, 0, -1));
         Assert.assertEquals(resp1.size(), 4);
         Assert.assertEquals(resp2.size(), 4);
         Assert.assertEquals(resp3.size(), 2);
