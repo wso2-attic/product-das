@@ -405,6 +405,23 @@
                 <include>*/**</include>
             </includes>
         </fileSet>
+
+        <!-- Identity anonymization tool -->
+        <fileSet>
+            <directory>target/forget-me/</directory>
+            <outputDirectory>${project.artifactId}-${pom.version}/repository/components/tools/</outputDirectory>
+            <excludes>
+                <exclude>**/forget-me</exclude>
+                <exclude>**/forget-me.bat</exclude>
+            </excludes>
+            <includes>
+                <include>**/lib/**</include>
+                <include>**/log4j.properties</include>
+                <include>**/conf/log-config/das-patterns.xml</include>
+                <include>**/conf/streams</include>
+            </includes>
+            <fileMode>644</fileMode>
+        </fileSet>
     </fileSets>
 
     <files>
@@ -1079,5 +1096,36 @@
         </file>
         <!--END Analytics JS APIs artifacts -->
 
+        <!-- Identity anonymization tool -->
+        <file>
+            <source>src/scripts/forget-me.sh</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/bin/</outputDirectory>
+            <fileMode>744</fileMode>
+        </file>
+
+        <file>
+            <source>src/scripts/forget-me.bat</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/bin/</outputDirectory>
+            <fileMode>744</fileMode>
+        </file>
+
+        <file>
+            <source>src/scripts/overrides/forget-me</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/components/tools/identity-anonymization-tool-${forgetme.tool.version}/bin/</outputDirectory>
+            <fileMode>744</fileMode>
+        </file>
+
+        <file>
+            <source>src/scripts/overrides/forget-me.bat</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/components/tools/identity-anonymization-tool-${forgetme.tool.version}/bin/</outputDirectory>
+            <fileMode>744</fileMode>
+        </file>
+
+        <file>
+            <source>target/forget-me/identity-anonymization-tool-${forgetme.tool.version}/conf/product-config/config-das.json</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/components/tools/identity-anonymization-tool-${forgetme.tool.version}/conf/</outputDirectory>
+            <destName>config.json</destName>
+            <fileMode>644</fileMode>
+        </file>
     </files>
 </assembly>
