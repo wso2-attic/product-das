@@ -397,6 +397,13 @@
                 <version>${carbon.analytics.version}</version>
             </dependency>
             <!--END - Integration Test Dependencies-->
+            <!-- START - Forget me tool -->
+            <dependency>
+                <groupId>org.wso2.carbon.privacy</groupId>
+                <artifactId>org.wso2.carbon.privacy.forgetme.tool</artifactId>
+                <version>${forgetme.tool.version}</version>
+            </dependency>
+            <!-- END - Forget me tool -->
         </dependencies>
     </dependencyManagement>
 
@@ -494,6 +501,8 @@
         <geoip.api.version>1.2.15</geoip.api.version>
 
         <vizgrammar.version>2.0.0</vizgrammar.version>
+
+        <forgetme.tool.version>1.1.2</forgetme.tool.version>
 
         <project.scm.id>my-scm-server</project.scm.id>
     </properties>
