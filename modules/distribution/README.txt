@@ -1,11 +1,11 @@
-WSO2 Data Analytics Server, v3.1.0
+WSO2 Data Analytics Server, v3.2.0
 ==================================
 
 @buildNumber@
 
-Welcome to the WSO2 Data Analytics Server, v3.1.0 release.
+Welcome to the WSO2 Data Analytics Server, v3.2.0 release.
 
-The WSO2 DAS version 3.1.0 is the third version of WSO2 DAS, which is complete rewrite of the analytics solution based on the latest technologies.
+The WSO2 DAS version 3.2.0 is the third version of WSO2 DAS, which is complete rewrite of the analytics solution based on the latest technologies.
 
 WSO2 DAS is powered by WSO2 Carbon, the SOA middleware component platform. 
 
@@ -22,7 +22,7 @@ New Features
 
 	- Various bug fixes and improvements (see https://wso2.org/jira/issues/?filter=13152)
 
-For a full list of improvements over DAS 3.1.0, please write to us at dev@wso2.org.
+For a full list of improvements over DAS 3.2.0, please write to us at dev@wso2.org.
 
 Features
 ========
@@ -177,7 +177,7 @@ WSO2 Data Analytics Server Binary Distribution Directory Structure
       This document contains information on installing WSO2 Application Server.
 
     - release-notes.html
-      Release information for WSO2 Data Analytics Server 3.1.0
+      Release information for WSO2 Data Analytics Server 3.2.0
 
 Secure sensitive information in carbon configuration files
 ==========================================================
