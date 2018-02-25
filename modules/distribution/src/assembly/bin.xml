@@ -422,6 +422,13 @@
             </includes>
             <fileMode>644</fileMode>
         </fileSet>
+
+        <!-- Privacy policy jaggery app -->
+        <fileSet>
+            <directory>src/privacy-policies/</directory>
+            <outputDirectory>${project.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/privacy-policies</outputDirectory>
+            <fileMode>644</fileMode>
+        </fileSet>
     </fileSets>
 
     <files>
