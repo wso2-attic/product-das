@@ -160,12 +160,12 @@
 
                                 <!-- ************** START - User Management ********* -->
                                 <featureArtifactDef>
-                                    org.wso2.carbon.identity:org.wso2.carbon.user.mgt.feature:${carbon.identity.version}
+                                        org.wso2.carbon.identity.framework:org.wso2.carbon.user.mgt.feature:${carbon.identity.version}
                                 </featureArtifactDef><featureArtifactDef>
-                                    org.wso2.carbon.identity:org.wso2.carbon.identity.core.ui.feature:${carbon.identity.version}
+                                    org.wso2.carbon.identity.framework:org.wso2.carbon.identity.core.ui.feature:${carbon.identity.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.wso2.carbon.identity:org.wso2.carbon.identity.core.server.feature:${carbon.identity.version}
+                                    org.wso2.carbon.identity.framework:org.wso2.carbon.identity.core.server.feature:${carbon.identity.version}
                                 </featureArtifactDef>
                                 <!-- ************** END - User Management ********* -->
 
@@ -260,7 +260,7 @@
                                     org.wso2.carbon.identity:org.wso2.carbon.identity.authenticator.saml2.sso.ui.feature:${carbon.identity.saml2.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.wso2.carbon.identity:org.wso2.carbon.security.mgt.feature:${carbon.identity.version}
+                                    org.wso2.carbon.identity.framework:org.wso2.carbon.security.mgt.feature:${carbon.identity.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.das:org.wso2.das.multitenancy.dashboard.ui.feature:${das.release.version}
