@@ -20,7 +20,7 @@
     <parent>
         <groupId>org.wso2.das</groupId>
         <artifactId>wso2das-parent</artifactId>
-        <version>3.0.2-SNAPSHOT</version>
+        <version>3.2.0-alpha3-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
@@ -111,14 +111,11 @@
                                 <!-- END - Analytics features -->
 
                                 <featureArtifactDef>
-                                    org.wso2.carbon.analytics:org.wso2.carbon.analytics.dashboard.feature:${carbon.analytics.version}
+                                    org.wso2.carbon.analytics:org.wso2.carbon.analytics.dashboard.ui.feature:${carbon.analytics.version}
                                 </featureArtifactDef>
-
-                                <!-- START - Log Analyzer Dashboard  -->
-                                <!--<featureArtifactDef>-->
-                                    <!--org.wso2.carbon.analytics:org.wso2.carbon.analytics.dashboard.logmonitor.ui.feature:${carbon.analytics.version}-->
-                                <!--</featureArtifactDef>-->
-                                <!-- END - Log Alanyzer dashboard -->
+                                <featureArtifactDef>
+                                    org.wso2.carbon.dashboards:org.wso2.carbon.dashboards.deployment.feature:${carbon.dashboard.version}
+                                </featureArtifactDef>
 
                                 <featureArtifactDef>
                                     org.wso2.carbon.analytics:org.wso2.carbon.analytics.messageconsole.feature:${carbon.analytics.version}
@@ -163,12 +160,12 @@
 
                                 <!-- ************** START - User Management ********* -->
                                 <featureArtifactDef>
-                                    org.wso2.carbon.identity:org.wso2.carbon.user.mgt.feature:${carbon.identity.version}
+                                        org.wso2.carbon.identity.framework:org.wso2.carbon.user.mgt.feature:${carbon.identity.version}
                                 </featureArtifactDef><featureArtifactDef>
-                                    org.wso2.carbon.identity:org.wso2.carbon.identity.core.ui.feature:${carbon.identity.version}
+                                    org.wso2.carbon.identity.framework:org.wso2.carbon.identity.core.ui.feature:${carbon.identity.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.wso2.carbon.identity:org.wso2.carbon.identity.core.server.feature:${carbon.identity.version}
+                                    org.wso2.carbon.identity.framework:org.wso2.carbon.identity.core.server.feature:${carbon.identity.version}
                                 </featureArtifactDef>
                                 <!-- ************** END - User Management ********* -->
 
@@ -203,10 +200,33 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon.analytics:org.wso2.carbon.analytics.eventtable.feature:${carbon.analytics.version}
                                 </featureArtifactDef>
-                                <featureArtifactDef>
-                                    org.wso2.carbon.analytics-common:org.wso2.carbon.event.execution.manager.feature:${carbon.analytics.common.version}
-                                </featureArtifactDef>
                                 <!-- ************** END - Data Bridge ************ -->
+                                <!-- ************** START - Template Manager ************ -->
+                                <featureArtifactDef>
+                                    org.wso2.carbon.analytics-common:org.wso2.carbon.event.template.manager.feature:${carbon.analytics.common.version}
+                                </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.analytics:org.wso2.carbon.analytics.eventsink.template.deployer.server.feature:${carbon.analytics.version}
+                                </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.analytics-common:org.wso2.carbon.event.receiver.template.deployer.server.feature:${carbon.analytics.common.version}
+                                </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.analytics-common:org.wso2.carbon.event.publisher.template.deployer.server.feature:${carbon.analytics.common.version}
+                                </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.analytics-common:org.wso2.carbon.event.stream.template.deployer.server.feature:${carbon.analytics.common.version}
+                                </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.analytics-common:org.wso2.carbon.gadget.template.deployer.server.feature:${carbon.analytics.common.version}
+                                </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.analytics-common:org.wso2.carbon.dashboard.template.deployer.server.feature:${carbon.analytics.common.version}
+                                </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.analytics-common:org.wso2.carbon.jaggeryapp.template.deployer.server.feature:${carbon.analytics.common.version}
+                                </featureArtifactDef>
+                                <!-- ************** END - Template Manager ************ -->
 
                                 <!-- ************** START - WebApp Deployment ************ -->
                                 <featureArtifactDef>
@@ -224,6 +244,9 @@
                                 <featureArtifactDef>
                                     org.jaggeryjs:org.jaggeryjs.feature:${jaggery.version}
                                 </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.jaggeryjs.modules:ws.feature:${jaggery.modules.carbon.version}
+                                </featureArtifactDef>
                                 <!-- ************** END - Jaggery feature ************ -->
 
                                 <!-- Multitenancy related -->
@@ -231,13 +254,13 @@
                                     org.wso2.carbon.multitenancy:org.wso2.carbon.tenant.common.feature:${carbon.multitenancy.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.wso2.carbon.identity:org.wso2.carbon.identity.authenticator.saml2.sso.server.feature:${carbon.identity.version}
+                                    org.wso2.carbon.identity:org.wso2.carbon.identity.authenticator.saml2.sso.server.feature:${carbon.identity.saml2.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.wso2.carbon.identity:org.wso2.carbon.identity.authenticator.saml2.sso.ui.feature:${carbon.identity.version}
+                                    org.wso2.carbon.identity:org.wso2.carbon.identity.authenticator.saml2.sso.ui.feature:${carbon.identity.saml2.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.wso2.carbon.identity:org.wso2.carbon.security.mgt.feature:${carbon.identity.version}
+                                    org.wso2.carbon.identity.framework:org.wso2.carbon.security.mgt.feature:${carbon.identity.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.das:org.wso2.das.multitenancy.dashboard.ui.feature:${das.release.version}
@@ -265,6 +288,9 @@
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon.data:org.wso2.carbon.datasource.reader.cassandra.server.feature:${carbon.data.version}
+                                </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.data:org.wso2.carbon.datasource.reader.mongo.server.feature:${carbon.data.version}
                                 </featureArtifactDef>
                                 <!-- END - Data source related -->
 
@@ -324,10 +350,13 @@
                                     org.jaggeryjs:org.jaggeryjs.server.feature:${jaggery.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.wso2.carbon.dashboards:org.wso2.carbon.dashboards.shindig.feature:${shindig.version}
+                                    org.wso2.carbon.dashboards:org.wso2.carbon.dashboards.shindig.feature:${carbon.dashboard.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon.dashboards:org.wso2.carbon.dashboards.portal.feature:${carbon.dashboard.version}
+                                </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.analytics-common:org.wso2.carbon.analytics.gadget.template.feature:${carbon.analytics.common.version}
                                 </featureArtifactDef>
                                 <!-- END - UES Features -->
 
@@ -347,6 +376,26 @@
                                     org.wso2.ciphertool:org.wso2.ciphertool.feature:${cipher.tool.version}
                                 </featureArtifactDef>
                                 <!-- END - Tools -->
+
+                                <!--START Carbon ML Features -->
+                                <featureArtifactDef>
+                                    org.wso2.carbon.ml:org.wso2.carbon.ml.feature:${carbon.ml.version}
+                                </featureArtifactDef>
+                                <featureArtifactDef>
+                                org.wso2.carbon.ml:org.wso2.carbon.ml.siddhi.extension.feature:${carbon.ml.version}
+                                </featureArtifactDef>
+                                <!--END Carbon ML Features -->
+
+                                <!-- Geo Dashboard feature -->
+                                <featureArtifactDef>
+                                    org.wso2.carbon.event-processing:org.wso2.carbon.geo.dashboard.feature:${carbon.event-processing.version}
+                                </featureArtifactDef>
+
+                                <!--Dashboard migration-->
+                                <feaureArtifactDef>
+                                    org.wso2.carbon.dashboards:org.wso2.carbon.dashboards.migration.tool.feature:${carbon.dashboard.version}
+                                </feaureArtifactDef>
+
                             </featureArtifacts>
                         </configuration>
                     </execution>
@@ -392,15 +441,13 @@
                                 </feature>
                                 <!-- END - Analytics features -->
                                  <feature>
-                                     <id>org.wso2.carbon.analytics.dashboard.feature.group</id>
+                                     <id>org.wso2.carbon.analytics.dashboard.ui.feature.group</id>
                                      <version>${carbon.analytics.version}</version>
                                  </feature>
-                                <!-- START - Log analyzer dashboard -->
-                                <!--<feature>-->
-                                    <!--<id>org.wso2.carbon.analytics.dashboard.logmonitor.ui.feature.group</id>-->
-                                    <!--<version>${carbon.analytics.version}</version>-->
-                                <!--</feature>-->
-                                <!-- END - Log Analyzer dashboard -->
+                                 <feature>
+                                     <id>org.wso2.carbon.dashboard.deployment.feature.group</id>
+                                     <version>${carbon.dashboard.version}</version>
+                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.analytics.messageconsole.feature.group</id>
                                     <version>${carbon.analytics.version}</version>
@@ -531,6 +578,10 @@
                                     <id>org.jaggeryjs.feature.group</id>
                                     <version>${jaggery.version}</version>
                                 </feature>
+                                <feature>
+                                    <id>org.jaggeryjs.modules.ws.feature.group</id>
+                                    <version>${jaggery.modules.carbon.version}</version>
+                                </feature>
                                 <!-- ***************feature groups end *******************-->
 
                                 <!-- START - Multitenancy related -->
@@ -540,11 +591,11 @@
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.identity.authenticator.saml2.sso.server.feature.group</id>
-                                    <version>${carbon.identity.version}</version>
+                                    <version>${carbon.identity.saml2.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.identity.authenticator.saml2.sso.ui.feature.group</id>
-                                    <version>${carbon.identity.version}</version>
+                                    <version>${carbon.identity.saml2.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.security.mgt.feature.group</id>
@@ -578,6 +629,10 @@
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.datasource.reader.cassandra.server.feature.group</id>
+                                    <version>${carbon.data.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.datasource.reader.mongo.server.feature.group</id>
                                     <version>${carbon.data.version}</version>
                                 </feature>
                                 <!-- END - Data source related -->
@@ -631,12 +686,41 @@
                                     <id>org.wso2.carbon.analytics.stream.persistence.server.feature.group</id>
                                     <version>${carbon.analytics.version}</version>
                                 </feature>
+                                <!-- ************** END - EVENT PROCESSING FEATURES ************ -->
+                                <!-- ************** START - TEMPLATE MANAGER FEATURES ************ -->
                                 <feature>
-                                    <id>org.wso2.carbon.event.execution.manager.feature.group</id>
+                                    <id>org.wso2.carbon.event.template.manager.feature.group</id>
                                     <version>${carbon.analytics.common.version}</version>
                                 </feature>
-
-                                <!-- ************** END - EVENT PROCESSING FEATURES ************ -->
+                                <feature>
+                                    <id>org.wso2.carbon.analytics.eventsink.template.deployer.server.feature.group</id>
+                                    <version>${carbon.analytics.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.event.receiver.template.deployer.server.feature.group</id>
+                                    <version>${carbon.analytics.common.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.event.publisher.template.deployer.server.feature.group</id>
+                                    <version>${carbon.analytics.common.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.event.stream.template.deployer.server.feature.group</id>
+                                    <version>${carbon.analytics.common.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.gadget.template.deployer.server.feature.group</id>
+                                    <version>${carbon.analytics.common.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.dashboard.template.deployer.server.feature.group</id>
+                                    <version>${carbon.analytics.common.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.jaggeryapp.template.deployer.server.feature.group</id>
+                                    <version>${carbon.analytics.common.version}</version>
+                                </feature>
+                                <!-- ************** END - TEMPLATE MANAGER FEATURES ************ -->
 
                                 <!-- START - UES Features -->
                                 <feature>
@@ -644,7 +728,7 @@
                                     <version>${jaggery.modules.carbon.version}</version>
                                 </feature>
                                 <feature>
-                                    <id>org.jaggeryjs.modules.process.feature.group</id>
+                                     <id>org.jaggeryjs.modules.process.feature.group</id>
                                     <version>${jaggery.modules.process.version}</version>
                                 </feature>
                                 <feature>
@@ -657,11 +741,15 @@
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.dashboards.shindig.feature.group</id>
-                                    <version>${shindig.version}</version>
+                                    <version>${carbon.dashboard.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.dashboards.portal.feature.group</id>
                                     <version>${carbon.dashboard.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.analytics.gadget.template.feature.group</id>
+                                    <version>${carbon.analytics.common.version}</version>
                                 </feature>
                                 <!-- END - UES Features -->
 
@@ -685,6 +773,29 @@
                                     <version>${cipher.tool.version}</version>
                                 </feature>
                                 <!--END - Tools-->
+
+                                <!--START Carbon ML Features -->
+                                <feature>
+                                    <id>org.wso2.carbon.ml.feature.group</id>
+                                    <version>${carbon.ml.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.ml.siddhi.extension.feature.group</id>
+                                    <version>${carbon.ml.version}</version>
+                                </feature>
+                                <!--END Carbon ML Features -->
+
+                                <!-- Geo Dashboard Feature -->
+                                <feature>
+                                    <id>org.wso2.carbon.geo.dashboard.feature.group</id>
+                                    <version>${carbon.event-processing.version}</version>
+                                </feature>
+
+                                <!--Dashboard migration-->
+                                <feature>
+                                    <id>org.wso2.carbon.dashboards.migration.tool.feature.group</id>
+                                    <version>${carbon.dashboard.version}</version>
+                                </feature>
                             </features>
                         </configuration>
                     </execution>

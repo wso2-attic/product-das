@@ -15,24 +15,28 @@
 * specific language governing permissions and limitations
 * under the License.
 */
-
 package org.wso2.das.integration.common.clients;
 
 import org.apache.axis2.AxisFault;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.analytics.webservice.stub.AnalyticsWebServiceStub;
+import org.wso2.carbon.analytics.webservice.stub.beans.AnalyticsAggregateRequest;
+import org.wso2.carbon.analytics.webservice.stub.beans.AnalyticsDrillDownRequestBean;
 import org.wso2.carbon.analytics.webservice.stub.beans.AnalyticsSchemaBean;
+import org.wso2.carbon.analytics.webservice.stub.beans.CategoryDrillDownRequestBean;
 import org.wso2.carbon.analytics.webservice.stub.beans.EventBean;
 import org.wso2.carbon.analytics.webservice.stub.beans.RecordBean;
+import org.wso2.carbon.analytics.webservice.stub.beans.SortByFieldBean;
 import org.wso2.carbon.analytics.webservice.stub.beans.StreamDefinitionBean;
+import org.wso2.carbon.analytics.webservice.stub.beans.SubCategoriesBean;
 import org.wso2.carbon.analytics.webservice.stub.beans.ValuesBatchBean;
 
 public class AnalyticsWebServiceClient {
 
     private static final Log log = LogFactory.getLog(AnalyticsWebServiceClient.class);
     private static final String serviceName = "AnalyticsWebService";
-    private static AnalyticsWebServiceStub webServiceStub;
+    private AnalyticsWebServiceStub webServiceStub;
 
     public AnalyticsWebServiceClient(String backEndUrl, String sessionCookie) throws AxisFault {
         String endPoint = backEndUrl + serviceName;
@@ -64,14 +68,26 @@ public class AnalyticsWebServiceClient {
         webServiceStub.addStreamDefinition(streamDefinitionBean);
     }
 
+    public void removeStreamDefinition(StreamDefinitionBean streamDefinitionBean) throws Exception {
+        webServiceStub.removeStreamDefinition(streamDefinitionBean.getName(), streamDefinitionBean.getVersion());
+    }
+
     public RecordBean[] getByRange(String tableName, long timeFrom, long timeTo, int recordFrom, int pageSize)
             throws Exception {
-        return webServiceStub.getByRange(tableName, 1, null, timeFrom, timeTo, recordFrom, pageSize);
+        RecordBean[] result = webServiceStub.getByRange(tableName, 1, null, timeFrom, timeTo, recordFrom, pageSize);
+        if (result == null) {
+            return new RecordBean[0];
+        }
+        return result;
     }
 
     public RecordBean[] getByRange(String tableName, String[] columns, long timeFrom, long timeTo, int recordFrom, int
             pageSize) throws Exception {
-        return webServiceStub.getByRange(tableName, 1, columns, timeFrom, timeTo, recordFrom, pageSize);
+        RecordBean[] result = webServiceStub.getByRange(tableName, 1, columns, timeFrom, timeTo, recordFrom, pageSize);
+        if (result == null) {
+            return new RecordBean[0];
+        }
+        return result;
     }
 
     public StreamDefinitionBean getStreamDefinition(String streamName, String version) throws Exception {
@@ -91,11 +107,19 @@ public class AnalyticsWebServiceClient {
     }
 
     public String[] listTables() throws Exception {
-        return webServiceStub.listTables();
+        String[] result = webServiceStub.listTables();
+        if (result == null) {
+            return new String[0];
+        }
+        return result;
     }
 
     public RecordBean[] getById(String tableName, String[] columns, String[] ids) throws Exception {
-        return webServiceStub.getById(tableName, 0, columns, ids);
+        RecordBean[] result = webServiceStub.getById(tableName, 0, columns, ids);
+        if (result == null) {
+            return new RecordBean[0];
+        }
+        return result;
     }
 
     public void deleteByIds(String tableName, String[] ids) throws Exception {
@@ -107,12 +131,58 @@ public class AnalyticsWebServiceClient {
     }
 
     public RecordBean[] search(String tableName, String query, int start, int count) throws Exception {
-        return webServiceStub.search(tableName, query, start, count);
+        RecordBean[] result = webServiceStub.search(tableName, query, start, count);
+        if (result == null) {
+            return new RecordBean[0];
+        }
+        return result;
+    }
+
+    public RecordBean[] search(String tableName, String query, int start, int count, String[] columns, SortByFieldBean[] fieldBeans) throws Exception {
+        RecordBean[] result = webServiceStub.searchWithSorting(tableName, query, start, count, columns, fieldBeans );
+        if (result == null) {
+            return new RecordBean[0];
+        }
+        return result;
+    }
+
+    public RecordBean[] drillDownSearch(AnalyticsDrillDownRequestBean bean) throws Exception {
+        RecordBean[] result = webServiceStub.drillDownSearch(bean);
+        if (result == null) {
+            return new RecordBean[0];
+        }
+        return result;
+    }
+
+    public SubCategoriesBean drillDownCategories(CategoryDrillDownRequestBean bean) throws Exception {
+        SubCategoriesBean result = webServiceStub.drillDownCategories(bean);
+        if (result == null) {
+            return new SubCategoriesBean();
+        }
+        return result;
+    }
+
+    public double drillDownSearchCount(AnalyticsDrillDownRequestBean bean) throws Exception {
+        double count = webServiceStub.drillDownSearchCount(bean);
+        return count;
     }
 
     public RecordBean[] getWithKeyValues(String tableName, String[] columns, ValuesBatchBean[] valuesBatchBeans)
             throws Exception {
-        return webServiceStub.getWithKeyValues(tableName, 1, columns, valuesBatchBeans);
+        RecordBean[] result = webServiceStub.getWithKeyValues(tableName, 1, columns, valuesBatchBeans);
+        if (result == null) {
+            return new RecordBean[0];
+        }
+        return result;
+    }
+
+    public RecordBean[] searchWithAggregates(AnalyticsAggregateRequest bean)
+            throws Exception {
+        RecordBean[] result = webServiceStub.searchWithAggregates(bean);
+        if (result == null) {
+            return new RecordBean[0];
+        }
+        return result;
     }
 
     public void clearIndices(String tableName) throws Exception {
@@ -122,4 +192,5 @@ public class AnalyticsWebServiceClient {
     public boolean isPaginationSupported(String tableName) throws Exception {
         return webServiceStub.isPaginationSupported(webServiceStub.getRecordStoreNameByTable(tableName));
     }
+    
 }

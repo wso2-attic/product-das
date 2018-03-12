@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.wso2.das</groupId>
         <artifactId>wso2das-integration</artifactId>
-        <version>3.0.2-SNAPSHOT</version>
+       <version>3.2.0-alpha3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -279,6 +279,14 @@
         <dependency>
             <groupId>org.jacoco</groupId>
             <artifactId>org.jacoco.agent</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.analytics</groupId>
+            <artifactId>org.wso2.carbon.analytics.eventsink</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.analytics</groupId>
+            <artifactId>org.wso2.carbon.analytics.api</artifactId>
         </dependency>
     </dependencies>
 </project>

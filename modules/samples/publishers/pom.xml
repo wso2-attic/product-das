@@ -19,7 +19,7 @@
     <parent>
         <groupId>org.wso2.das</groupId>
         <artifactId>das-samples</artifactId>
-        <version>3.0.2-SNAPSHOT</version>
+        <version>3.2.0-alpha3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -126,7 +126,7 @@
             <artifactId>org.wso2.carbon.databridge.commons</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.googlecode.disruptor.wso2</groupId>
+            <groupId>org.wso2.orbit.com.lmax</groupId>
             <artifactId>disruptor</artifactId>
         </dependency>
     </dependencies>

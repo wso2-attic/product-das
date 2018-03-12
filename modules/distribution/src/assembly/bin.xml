@@ -27,12 +27,9 @@
             <directory>target/wso2carbon-core-${carbon.kernel.version}</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}</outputDirectory>
             <excludes>
-                <exclude>**/repository/deployment/server/axis2services/*</exclude>
                 <exclude>**/*.sh</exclude>
                 <exclude>**/wso2server.bat</exclude>
                 <exclude>**/axis2services/sample01.aar</exclude>
-                <exclude>**/axis2services/echo/**</exclude>
-                <exclude>**/axis2services/version/**</exclude>
                 <exclude>**/pom.xml</exclude>
                 <exclude>**/version.txt</exclude>
                 <exclude>**/README*</exclude>
@@ -79,7 +76,7 @@
         </fileSet>
         <fileSet>
             <directory>../samples/capps/target</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/capps</outputDirectory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/capps</outputDirectory>
         </fileSet>
 
         <fileSet>
@@ -93,6 +90,59 @@
         <fileSet>
             <directory>../samples/utils/</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/samples/utils</outputDirectory>
+        </fileSet>
+
+        <fileSet>
+            <directory>../samples/ml</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/ml</outputDirectory>
+        </fileSet>
+
+        <!--copying cep samples-->
+        <fileSet>
+            <directory>../samples/cep</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/cep</outputDirectory>
+            <includes>
+                <include>artifacts/**</include>
+                <include>consumers/**</include>
+                <include>producers/**</include>
+                <include>ReadMe.txt</include>
+                <include>resource/**</include>
+                <include>utils/**</include>
+            </includes>
+            <excludes>
+                <exclude>**/*.iml</exclude>
+                <exclude>**/*.releaseBackup</exclude>
+                <exclude>%regex[(?!.*utils/).*pom.xml]</exclude>
+                <exclude>**/target/**</exclude>
+            </excludes>
+        </fileSet>
+        <fileSet>
+            <directory>../samples/cep/target/lib</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/cep/lib</outputDirectory>
+            <includes>
+                <include>*.jar</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>../samples/cep/target/output-ui-test</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/cep/artifacts/0071/webapps</outputDirectory>
+            <includes>
+                <include>*.war</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>../samples/cep/extensions/geo-event-notifier/target</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/cep/utils/geo-dashboard-extensions</outputDirectory>
+            <includes>
+                <include>*.jar</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>../samples/cep/extensions/geo-event-fuser/target</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/cep/utils/geo-dashboard-extensions</outputDirectory>
+            <includes>
+                <include>*.jar</include>
+            </includes>
         </fileSet>
 
         <!-- copying runtimes -->
@@ -163,17 +213,6 @@
                 <include>**/analytics-eventsink-config.xml</include>
             </includes>
         </fileSet>
-        <!-- Log analyzer webapp -->
-        <!--<fileSet>
-            <directory>
-                src/DASLog
-            </directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/log-analyzer</outputDirectory>
-            <includes>
-                <include>**/*</include>
-            </includes>
-        </fileSet>-->
-
         <!-- CEP -->
 
         <!--creating an empty input event adaptors directory-->
@@ -220,15 +259,6 @@
             </excludes>
         </fileSet>
 
-        <!--Storm Jar-->
-        <fileSet>
-            <directory>repository/conf/cep/storm</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/cep/storm</outputDirectory>
-            <includes>
-                <include>org.wso2.cep.storm.dependencies.jar</include>
-            </includes>
-        </fileSet>
-        
         <!-- Some war files related to CEP websockets -->
         <fileSet>
             <directory>
@@ -239,10 +269,19 @@
             <includes>
                 <include>inputwebsocket.war</include>
                 <include>outputwebsocket.war</include>
-                <include>outputui.war</include>
             </includes>
         </fileSet>
 
+        <!--Copying template-manager folder for CEP Template Manager -->
+        <fileSet>
+            <directory>src/repository/conf/template-manager</directory>
+            <outputDirectory>
+                ${pom.artifactId}-${pom.version}/repository/conf/template-manager
+            </outputDirectory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
 
         <!-- END CEP -->
 
@@ -271,77 +310,13 @@
         </fileSet>
 
         <!-- Dashboard portal Jaggery app. Should be copied to <DAS_HOME>/repository/deployment/server/jaggeryapps -->
+        <!-- TODO remove exclusions after upgrading to carbon-dashboards 1.0.19 -->
         <fileSet>
             <directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/jaggeryapps/portal
             </directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/portal</outputDirectory>
-            <excludes>
-                <exclude>controllers/index.jag</exclude>
-                <exclude>controllers/apis/analytics.jag</exclude>
-                <exclude>controllers/apis/rt.jag</exclude>
-                <exclude>modules/utils.js</exclude>
-                <exclude>extensions/components/gadget/index.js</exclude>
-            </excludes>
         </fileSet>
-
-        <!-- Temporay bundling these files for the fix of DAS-332 --> 
-        <!-- analytics.jag with new OSGi based implementation and rt.jag -->
-        <fileSet>
-            <directory>
-                src/ues/patches/apis
-            </directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/portal/controllers/apis</outputDirectory>
-            <includes>
-                <include>**/*</include>
-            </includes>
-        </fileSet>
-
-        <!-- Added sso module -->
-        <fileSet>
-            <directory>
-                src/ues/patches/modules
-            </directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/portal/modules</outputDirectory>
-            <includes>
-                <include>**/*</include>
-            </includes>
-        </fileSet>
-
-        <!-- Fix for index redirection issue -->
-        <fileSet>
-            <directory>
-                src/ues/patches/controllers
-            </directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/portal/controllers</outputDirectory>
-            <includes>
-                <include>**/*</include>
-            </includes>
-        </fileSet>
-
-        <!-- Fix for DAS-357, removed hardcoded localhost in the gadget component -->
-        <fileSet>
-            <directory>
-                src/ues/patches/extensions
-            </directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/portal/extensions/components/gadget</outputDirectory>
-            <includes>
-                <include>**/*</include>
-            </includes>
-        </fileSet>
-
-        <!-- Fix for X axis sorting issue with line and area charts -->
-        <fileSet>
-            <directory>
-                src/ues/patches/js
-            </directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/portal/js</outputDirectory>
-            <includes>
-                <include>**/*</include>
-            </includes>
-        </fileSet>
-        <!-- //Temporay bundling -->
-
         <!-- END UES related dashboard artifacts -->
 
 
@@ -356,7 +331,18 @@
             </excludes>
         </fileSet>
 
-        <!-- Copying dbscripts related to metrics feature -->
+        <!-- Copying dbscripts related to identity and metrics features -->
+
+        <fileSet>
+            <directory>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/identity/
+            </directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts/identity</outputDirectory>
+            <includes>
+                <include>**/*.sql</include>
+            </includes>
+        </fileSet>
+
         <fileSet>
             <directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/metrics/
@@ -367,6 +353,82 @@
             </includes>
         </fileSet>
 
+        <!-- ML -->
+        <fileSet>
+            <directory>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/jaggeryapps/
+            </directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps</outputDirectory>
+            <includes>
+                <include>**/*.*</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/ml/</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts/ml/</outputDirectory>
+            <includes>
+                <include>**/*.sql</include>
+            </includes>
+        </fileSet>
+        <!-- END copying dbscripts -->
+
+        <fileSet>
+            <directory>../../modules/samples/extensions/geo-event-notifier/target</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/utils/geo-dashboard-extensions</outputDirectory>
+            <includes>
+                <include>*.jar</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>../../modules/samples/extensions/geo-event-fuser/target</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/utils/geo-dashboard-extensions</outputDirectory>
+            <includes>
+                <include>*.jar</include>
+            </includes>
+        </fileSet>
+
+        <!-- Copying 'sharedstore' directory -->
+        <fileSet>
+            <directory>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/resources/sharedstore/layout
+            </directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/resources/sharedstore/layout</outputDirectory>
+        </fileSet>
+
+        <!--Dashboard migration-->
+        <fileSet>
+            <directory>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/migration/
+            </directory>
+            <outputDirectory>${project.artifactId}-${pom.version}/migration/</outputDirectory>
+            <includes>
+                <include>*/**</include>
+            </includes>
+        </fileSet>
+
+        <!-- Identity anonymization tool -->
+        <fileSet>
+            <directory>target/forget-me/identity-anonymization-tool-${forgetme.tool.version}/</directory>
+            <outputDirectory>${project.artifactId}-${pom.version}/repository/components/tools/identity-anonymization-tool/</outputDirectory>
+            <excludes>
+                <exclude>**/forget-me</exclude>
+                <exclude>**/forget-me.bat</exclude>
+            </excludes>
+            <includes>
+                <include>**/lib/**</include>
+                <include>**/log4j.properties</include>
+                <include>**/conf/log-config/das-patterns.xml</include>
+                <include>**/conf/streams/**</include>
+            </includes>
+            <fileMode>644</fileMode>
+        </fileSet>
+
+        <!-- Privacy policy jaggery app -->
+        <fileSet>
+            <directory>src/privacy-policies/</directory>
+            <outputDirectory>${project.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/privacy-policies</outputDirectory>
+            <fileMode>644</fileMode>
+        </fileSet>
     </fileSets>
 
     <files>
@@ -496,6 +558,16 @@
             <source>src/repository/conf/registry.xml</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/</outputDirectory>
             <fileMode>644</fileMode>
+        </file>
+
+        <!--Gadget Migration Resources-->
+        <file>
+            <source>migration/dashboards/migration-1.0.x-2.0.x/resources/main.js</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/migration/dashboards/migration-1.0.x-2.0.x/resources/</outputDirectory>
+        </file>
+        <file>
+            <source>migration/dashboards/migration-1.0.x-2.0.x/resources/outputAdapterUiLibrary.js</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/migration/dashboards/migration-1.0.x-2.0.x/resources/</outputDirectory>
         </file>
 
         <!-- ************* Data bridge related files ********** -->
@@ -649,6 +721,14 @@
             </outputDirectory>
         </file>
 
+        <!-- Including tasks-config.xml file-->
+        <file>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/etc/tasks-config.xml
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/etc/</outputDirectory>
+        </file>
+
         <!--loads spark environment variables-->
         <file>
             <!--../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/bin/load-spark-env-vars.sh-->
@@ -697,6 +777,26 @@
             <fileMode>644</fileMode>
         </file>
 
+        <!-- copying wso2cep-samples scripts for DAS-->
+        <file>
+            <source>
+                src/bin/wso2cep-samples.sh
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/bin/
+            </outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>755</fileMode>
+        </file>
+        <file>
+            <source>
+                src/bin/wso2cep-samples.bat
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/bin/
+            </outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+
         <!--spark defaults file-->
         <file>
             <source>
@@ -727,6 +827,15 @@
             <fileMode>755</fileMode>
         </file>
 
+        <file>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/analytics/spark/carbon-spark-classpath.conf
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/analytics/spark/
+            </outputDirectory>
+            <fileMode>755</fileMode>
+        </file>
+
         <!--spark udf conf file-->
         <file>
             <source>
@@ -745,6 +854,63 @@
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/analytics/spark/
             </outputDirectory>
             <fileMode>755</fileMode>
+        </file>
+
+        <!--spark log4j.properties file-->
+        <file>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/analytics/spark/spark-jdbc-config.xml
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/analytics/spark/
+            </outputDirectory>
+            <fileMode>755</fileMode>
+        </file>
+
+        <!--akka conf files-->
+        <file>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/etc/bundle-config/com.typesafe.config/reference.conf
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/etc/bundle-config/com.typesafe.config/
+            </outputDirectory>
+            <fileMode>644</fileMode>
+        </file>
+
+        <!--YARN conf files-->
+        <file>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/etc/bundle-config/hadoop-client/core-site.xml
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/etc/bundle-config/hadoop-client/
+            </outputDirectory>
+            <fileMode>644</fileMode>
+        </file>
+
+        <file>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/etc/bundle-config/hadoop-client/hdfs-site.xml
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/etc/bundle-config/hadoop-client/
+            </outputDirectory>
+            <fileMode>644</fileMode>
+        </file>
+
+        <file>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/etc/bundle-config/hadoop-client/yarn-site.xml
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/etc/bundle-config/hadoop-client/
+            </outputDirectory>
+            <fileMode>644</fileMode>
+        </file>
+
+        <file>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/etc/bundle-config/hadoop-client/mapred-site.xml
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/etc/bundle-config/hadoop-client/
+            </outputDirectory>
+            <fileMode>644</fileMode>
         </file>
 
         <!-- analytics backup tool script file-->
@@ -779,18 +945,6 @@
             <outputDirectory>${pom.artifactId}-${pom.version}/bin/</outputDirectory>
         </file>
 
-
-        <!-- CEP -->
-
-        <file>
-            <source>
-                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/cep/storm/storm.yaml
-            </source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/cep/storm/
-            </outputDirectory>
-            <filtered>true</filtered>
-        </file>
-
         <!-- Including rdbms configuration file for event simulator -->
         <file>
             <source>
@@ -798,15 +952,6 @@
             </source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/cep
             </outputDirectory>
-            <filtered>true</filtered>
-        </file>
-
-        <!--Copying sample domain template file, sample for CEP Execution Manager -->
-        <file>
-            <source>
-                src/repository/conf/domain-template/temperature-analysis.xml
-            </source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/execution-manager/domain-template</outputDirectory>
             <filtered>true</filtered>
         </file>
 
@@ -890,5 +1035,104 @@
 
         <!-- END CEP -->
 
+
+
+        <!--START ML config files-->
+        <file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/machine-learner.xml</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>
+            <fileMode>644</fileMode>
+        </file>
+        <file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/datasources/ml-datasources.xml</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/datasources/</outputDirectory>
+            <fileMode>644</fileMode>
+        </file>
+        <file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/etc/h2o-config.xml</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/etc/</outputDirectory>
+            <fileMode>644</fileMode>
+        </file>
+        <!-- ML REST APIs WebApp -->
+        <file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/webapps/api.war</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps/</outputDirectory>
+            <fileMode>644</fileMode>
+        </file>
+        <file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/database/WSO2ML_DB.h2.db
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/database/</outputDirectory>
+            <fileMode>644</fileMode>
+        </file>
+        <file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/etc/ml-email-templates.xml</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/email/</outputDirectory>
+            <fileMode>644</fileMode>
+        </file>
+        <!--END ML config files-->
+
+        <!-- Adding Geo Dashboard  configuration files and Capp -->
+        <file>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/carbonapps/org_wso2_carbon_geo_dashboard-1.0.0.car
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/capp/</outputDirectory>
+            <fileMode>644</fileMode>
+        </file>
+
+        <!-- Analytics JS APIs artifacts -->
+        <file>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/jaggeryapps/portal/controllers/apis/analytics.jag
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/portal/controllers/apis</outputDirectory>
+            <!--commented since this tag causes issues in maven assembly plugin when copying zip formats-->
+            <!--filtered>true</filtered-->
+            <fileMode>644</fileMode>
+        </file>
+
+        <file>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/deployment/server/jaggeryapps/portal/js/carbon-analytics.js
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/portal/js</outputDirectory>
+            <!--commented since this tag causes issues in maven assembly plugin when copying zip formats-->
+            <!--filtered>true</filtered-->
+            <fileMode>644</fileMode>
+        </file>
+        <!--END Analytics JS APIs artifacts -->
+
+        <!-- Identity anonymization tool -->
+        <file>
+            <source>src/scripts/forget-me.sh</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/bin/</outputDirectory>
+            <fileMode>744</fileMode>
+        </file>
+
+        <file>
+            <source>src/scripts/forget-me.bat</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/bin/</outputDirectory>
+            <fileMode>744</fileMode>
+        </file>
+
+        <file>
+            <source>src/scripts/overrides/forget-me</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/components/tools/identity-anonymization-tool/bin/</outputDirectory>
+            <fileMode>744</fileMode>
+        </file>
+
+        <file>
+            <source>src/scripts/overrides/forget-me.bat</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/components/tools/identity-anonymization-tool/bin/</outputDirectory>
+            <fileMode>744</fileMode>
+        </file>
+
+        <file>
+            <source>target/forget-me/identity-anonymization-tool-${forgetme.tool.version}/conf/product-config/config-das.json</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/components/tools/identity-anonymization-tool/conf/</outputDirectory>
+            <destName>config.json</destName>
+            <fileMode>644</fileMode>
+        </file>
     </files>
 </assembly>

@@ -20,7 +20,7 @@
     <parent>
         <groupId>org.wso2.das</groupId>
         <artifactId>wso2das-parent</artifactId>
-        <version>3.0.2-SNAPSHOT</version>
+        <version>3.2.0-alpha3-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
@@ -74,6 +74,34 @@
                                     <overWrite>true</overWrite>
                                     <outputDirectory>target</outputDirectory>
                                 </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.wso2.carbon.privacy</groupId>
+                                    <artifactId>org.wso2.carbon.privacy.forgetme.tool</artifactId>
+                                    <version>${forgetme.tool.version}</version>
+                                    <type>zip</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target/forget-me</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>unpack-cepsamples.zip</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.wso2.cep</groupId>
+                                    <artifactId>org.wso2.cep.samples.distribution</artifactId>
+                                    <version>${cep.samples.distribution.version}</version>
+                                    <classifier>samples</classifier>
+                                    <type>zip</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target</outputDirectory>
+                                </artifactItem>
                             </artifactItems>
                         </configuration>
                     </execution>
@@ -110,6 +138,24 @@
                     </execution>
 
                     <execution>
+                        <id>1-usermgt-fix</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <!-- commenting "GetAllRolesOfUserEnabled" property to fix
+                                https://wso2.org/jira/browse/IDENTITY-3489 -->
+                                <echo message="########### Comment out GetAllRolesOfUserEnabled property ##############" />
+                                <replace file="target/wso2carbon-core-${carbon.kernel.version}/repository/conf/user-mgt.xml" token="&lt;Property name=&quot;GetAllRolesOfUserEnabled&quot;&gt;true&lt;/Property&gt;" value="&lt;!--Property name=&quot;GetAllRolesOfUserEnabled&quot;&gt;true&lt;/Property--&gt;" />
+                                <replace file="target/wso2carbon-core-${carbon.kernel.version}/repository/conf/security/Owasp.CsrfGuard.Carbon.properties" token="org.owasp.csrfguard.unprotected.Services=%servletContext%/services/*" value="org.owasp.csrfguard.unprotected.Services=%servletContext%/services/*${line.separator}org.owasp.csrfguard.unprotected.Endpoints=%servletContext%/endpoints/*${line.separator}org.owasp.csrfguard.unprotected.RestApi=%servletContext%/analytics/*${line.separator}org.owasp.csrfguard.unprotected.JsApi=%servletContext%/portal/apis/analytics/*${line.separator}org.owasp.csrfguard.unprotected.Servlet=%servletContext%/analytics-api/*${line.separator}org.owasp.csrfguard.unprotected.ml=%servletContext%/api/login*${line.separator}org.owasp.csrfguard.unprotected.passivests=%servletContext%/acs/*" />
+                                <replace file="target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomcat/carbon/WEB-INF/web.xml" token="/repository/conf/security/Owasp.CsrfGuard.Carbon.properties" value="repository/conf/security/Owasp.CsrfGuard.Carbon.properties" />
+                            </target>
+                        </configuration>
+                    </execution>
+
+                    <execution>
                         <id>fix-config-issues</id>
                         <phase>package</phase>
                         <configuration>
@@ -120,13 +166,17 @@
                                 <!-- Move IS UI to configure menu -->
                                 <property name="tempdir2" value="target/identity-ui" />
                                 <mkdir dir="${tempdir2}" />
-                                <unzip src="target/wso2carbon-core-${carbon.kernel.version}/repository/components/plugins/org.wso2.carbon.user.mgt.ui_${carbon.identity.version}.jar" dest="${tempdir2}" />
+                                <unzip src="target/wso2carbon-core-${carbon.kernel.version}/repository/components/plugins/org.wso2.carbon.user.mgt.ui_${identity.jar.version}.jar" dest="${tempdir2}" />
                                 <replace file="${tempdir2}/META-INF/component.xml" token="&lt;parent-menu&gt;identity_menu&lt;/parent-menu&gt;" value="&lt;parent-menu&gt;configure_menu&lt;/parent-menu&gt;" />
-                                <zip destfile="target/wso2carbon-core-${carbon.kernel.version}/repository/components/plugins/org.wso2.carbon.user.mgt.ui_${carbon.identity.version}.jar" basedir="${tempdir2}" />
-                                <unzip src="target/wso2carbon-core-${carbon.kernel.version}/repository/components/plugins/org.wso2.carbon.identity.user.store.configuration.ui_${carbon.identity.version}.jar" dest="${tempdir3}" />
+                                <zip destfile="target/wso2carbon-core-${carbon.kernel.version}/repository/components/plugins/org.wso2.carbon.user.mgt.ui_${identity.jar.version}.jar" basedir="${tempdir2}" />
+                                <unzip src="target/wso2carbon-core-${carbon.kernel.version}/repository/components/plugins/org.wso2.carbon.identity.user.store.configuration.ui_${identity.jar.version}.jar" dest="${tempdir3}" />
                                 <replace file="${tempdir3}/META-INF/component.xml" token="&lt;parent-menu&gt;identity_menu&lt;/parent-menu&gt;" value="&lt;parent-menu&gt;configure_menu&lt;/parent-menu&gt;" />
-                                <zip destfile="target/wso2carbon-core-${carbon.kernel.version}/repository/components/plugins/org.wso2.carbon.identity.user.store.configuration.ui_${carbon.identity.version}.jar" basedir="${tempdir3}" />
+                                <zip destfile="target/wso2carbon-core-${carbon.kernel.version}/repository/components/plugins/org.wso2.carbon.identity.user.store.configuration.ui_${identity.jar.version}.jar" basedir="${tempdir3}" />
+                                <unzip src="target/wso2carbon-core-${carbon.kernel.version}/repository/components/plugins/org.wso2.carbon.security.mgt.ui_${identity.jar.version}.jar" dest="${tempdir4}" />
+                                <replace file="${tempdir4}/META-INF/component.xml" token="&lt;parent-menu&gt;manage_menu&lt;/parent-menu&gt;" value="&lt;parent-menu&gt;configure_menu&lt;/parent-menu&gt;" />
+                                <zip destfile="target/wso2carbon-core-${carbon.kernel.version}/repository/components/plugins/org.wso2.carbon.security.mgt.ui_${identity.jar.version}.jar" basedir="${tempdir4}" />
                                 <concat destfile="target/wso2carbon-core-${carbon.kernel.version}/repository/conf/etc/logging-bridge.properties" append="true" fixlastline="true">org.restlet.level=SEVERE</concat>
+                                <delete dir="${tempdir4}" />
                                 <delete dir="${tempdir3}" />
                                 <delete dir="${tempdir2}" />
                             </tasks>
@@ -136,27 +186,6 @@
                         </goals>
                     </execution>
 
-                   <!-- <execution>
-                        <id>1-replace-user-mgt-property</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <tasks>
-                                &lt;!&ndash; commenting "GetAllRolesOfUserEnabled" property to fix IDENTITY-3489 &ndash;&gt;
-                                <echo message="Commenting out property 'GetAllRolesOfUserEnabled' in user-mgt.xml" />
-                                <replace file="target/wso2carbon-core-${carbon.kernel.version}/repository/conf/user-mgt.xml" token="&lt;Property name=&quot;GetAllRolesOfUserEnabled&quot;&gt;true&lt;/Property&gt;" value="&lt;!&#45;&#45; &lt;Property name=&quot;GetAllRolesOfUserEnabled&quot;&gt;true&lt;/Property&gt; &#45;&#45;&gt;" />
-                                &lt;!&ndash; Moving identity UI component to "Configure" UI group &ndash;&gt;
-                                <echo message="Moving identity-related UI component to 'Configure' in the management console" />
-                                <property name="tempdir2" value="target/identity-ui" />
-                                <mkdir dir="${tempdir2}" />
-                                <unzip src="target/wso2carbon-core-${carbon.kernel.version}/repository/components/plugins/org.wso2.carbon.feature.mgt.ui_${carbon.identity.version}.jar" dest="${tempdir2}" />
-                                <replace file="${tempdir2}/META-INF/component.xml" token="&lt;parent-menu&gt;identity_menu&lt;/parent-menu&gt;" value="&lt;parent-menu&gt;configure_menu&lt;/parent-menu&gt;" />
-                                <zip destfile="target/wso2carbon-core-${carbon.kernel.version}/repository/components/plugins/org.wso2.carbon.feature.mgt.ui_${carbon.identity.version}.jar" basedir="${tempdir2}" />
-                            </tasks>
-                        </configuration>
-                    </execution>-->
                     <execution>
                         <id>clean_target</id>
                         <phase>install</phase>
@@ -177,6 +206,32 @@
                             <goal>run</goal>
                         </goals>
                     </execution>
+
+                    <execution>
+                        <id>extract and copy cep samples</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <property name="tempdir" value="target/cepsamples-temp" />
+                                <mkdir dir="${tempdir}" />
+                                <unzip dest="${tempdir}">
+                                    <fileset dir="target">
+                                        <include name="org.wso2.cep.samples.distribution-${cep.samples.distribution.version}/samples.zip" />
+                                    </fileset>
+                                </unzip>
+                                <copy todir="../samples/cep">
+                                <fileset dir="${tempdir}">
+                                </fileset>
+                            </copy>
+                                <delete dir="${tempdir}" />
+                                <delete dir="target/org.wso2.cep.samples.distribution-${cep.samples.distribution.version}" />
+                            </tasks>
+                        </configuration>
+                    </execution>
+
                 </executions>
             </plugin>
 
@@ -228,4 +283,10 @@
             </plugin>
         </plugins>
     </build>
+
+    <properties>
+        <identity.jar.version>5.11.118</identity.jar.version>
+        <cep.samples.distribution.version>4.2.1-SNAPSHOT</cep.samples.distribution.version>
+    </properties>
+
 </project>

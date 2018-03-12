@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.wso2.das</groupId>
         <artifactId>wso2das-integration</artifactId>
-        <version>3.0.2-SNAPSHOT</version>
+       <version>3.2.0-alpha3-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
@@ -47,6 +47,11 @@
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.automation</groupId>
+            <artifactId>org.wso2.carbon.automation.extensions</artifactId>
             <scope>compile</scope>
         </dependency>
     </dependencies>

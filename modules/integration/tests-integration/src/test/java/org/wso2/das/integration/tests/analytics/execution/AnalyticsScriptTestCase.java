@@ -27,10 +27,13 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.carbon.analytics.api.AnalyticsDataAPI;
+import org.wso2.carbon.analytics.api.AnalyticsDataAPIUtil;
 import org.wso2.carbon.analytics.api.CarbonAnalyticsAPI;
 import org.wso2.carbon.analytics.datasource.commons.Record;
 import org.wso2.carbon.analytics.spark.admin.stub.AnalyticsProcessorAdminServiceAnalyticsProcessorAdminExceptionException;
 import org.wso2.carbon.analytics.spark.admin.stub.AnalyticsProcessorAdminServiceStub;
+import org.wso2.carbon.analytics.spark.admin.stub.AnalyticsProcessorAdminServiceStub.AnalyticsQueryResultDto;
+import org.wso2.carbon.analytics.spark.admin.stub.AnalyticsProcessorAdminServiceStub.AnalyticsRowResultDto;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 import org.wso2.das.integration.common.utils.DASIntegrationTest;
@@ -44,7 +47,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -52,49 +58,53 @@ public class AnalyticsScriptTestCase extends DASIntegrationTest {
     private static final Log log = LogFactory.getLog(AnalyticsScriptTestCase.class);
 
     private static final String TABLE_NAME = "ANALYTICS_SCRIPTS_TEST";
+    private static final String GTA_STATS_TABLE = "Stats";
+    private static final String GTA_STATS_SUMMARY_TABLE = "StatsSummary";
     private static final String SCRIPT_RESOURCE_DIR = "analytics" + File.separator + "scripts";
     private static final String ANALYTICS_SERVICE_NAME = "AnalyticsProcessorAdminService";
     private static final String ANALYTICS_SCRIPT_WITH_TASK = "AddNewScriptTestWithTask";
     private static final String ANALYTICS_SCRIPT_WITHOUT_TASK  = "AddNewScriptTestWithouTask";
+    private static final String UDAF_TEST_TABLE  = "udafTest";
+
 
     private AnalyticsProcessorAdminServiceStub analyticsStub;
+    
+    private AnalyticsDataAPI analyticsDataAPI;
 
     @BeforeClass(alwaysRun = true)
     protected void init() throws Exception {
         super.init();
+        String apiConf = new File(this.getClass().getClassLoader().getResource(
+                "dasconfig" + File.separator + "api" + File.separator + "analytics-data-config.xml").toURI()).getAbsolutePath();
+        this.analyticsDataAPI = new CarbonAnalyticsAPI(apiConf);
         initializeSampleData();
         initializeStub();
         deleteIfExists(ANALYTICS_SCRIPT_WITH_TASK);
         deleteIfExists(ANALYTICS_SCRIPT_WITHOUT_TASK);
     }
-
+    
     private void initializeSampleData() throws Exception {
-
-        String apiConf =
-                new File(this.getClass().getClassLoader().
-                        getResource("dasconfig" + File.separator + "api" + File.separator + "analytics-data-config.xml").toURI())
-                        .getAbsolutePath();
-        AnalyticsDataAPI analyticsDataAPI = new CarbonAnalyticsAPI(apiConf);
+        log.info("Deleting table: " + TABLE_NAME + " for Analytics Scripts TestCase (if exists)");
+        this.analyticsDataAPI.deleteTable(MultitenantConstants.SUPER_TENANT_ID, TABLE_NAME);
         //Creating sample tables used to test scripts.
-        log.info("Creating table :" + TABLE_NAME + " for Analytics Scripts TestCase");
-        analyticsDataAPI.createTable(MultitenantConstants.SUPER_TENANT_ID, TABLE_NAME);
+        log.info("Creating table: " + TABLE_NAME + " for Analytics Scripts TestCase");
+        this.analyticsDataAPI.createTable(MultitenantConstants.SUPER_TENANT_ID, TABLE_NAME);
         //Push some events to the table
         log.info("Inserting some events for the table : " + TABLE_NAME);
         List<Record> recordList = new ArrayList<>();
         Map<String, Object> recordValues = new HashMap<>();
         recordValues.put("server_name", "DAS-123");
         recordValues.put("ip", "192.168.2.1");
-        recordValues.put("tenant", "-1234");
-        recordValues.put("sequence", "104050000");
+        recordValues.put("tenant", -1234);
+        recordValues.put("sequence", 104050000L);
         recordValues.put("summary", "Joey asks, how you doing?");
-
         for (int i = 0; i < 10; i++) {
             Record record = new Record("id" + i, MultitenantConstants.SUPER_TENANT_ID, TABLE_NAME, recordValues);
             recordList.add(record);
         }
-        analyticsDataAPI.put(recordList);
+        this.analyticsDataAPI.put(recordList);
     }
-
+    
     private void initializeStub() throws Exception {
         ConfigurationContext configContext = ConfigurationContextFactory.
                 createConfigurationContextFromFileSystem(null);
@@ -235,9 +245,63 @@ public class AnalyticsScriptTestCase extends DASIntegrationTest {
                 getAnalyticsScriptResourcePath("TestScript.ql"));
         analyticsStub.execute(scriptContent);
     }
+    
+    @Test(groups = "wso2.bam", description = "Executing script content with Global Tenant Access", dependsOnMethods = "executeScriptContent")
+    public void executeScriptGlobalTenantAccess() throws Exception {
+        log.info("Deleting table: " + GTA_STATS_TABLE + ", " + GTA_STATS_SUMMARY_TABLE + " for GTA TestCase (if exists)");
+        this.analyticsDataAPI.deleteTable(MultitenantConstants.SUPER_TENANT_ID, GTA_STATS_TABLE);
+        this.analyticsDataAPI.deleteTable(1, GTA_STATS_TABLE);
+        this.analyticsDataAPI.deleteTable(2, GTA_STATS_TABLE);
+        this.analyticsDataAPI.deleteTable(MultitenantConstants.SUPER_TENANT_ID, GTA_STATS_SUMMARY_TABLE);
+        this.analyticsDataAPI.deleteTable(1, GTA_STATS_SUMMARY_TABLE);
+        this.analyticsDataAPI.deleteTable(2, GTA_STATS_SUMMARY_TABLE);
+        
+        String scriptContent = getResourceContent(AnalyticsScriptTestCase.class, getAnalyticsScriptResourcePath("GTATestScript.ql"));
+        AnalyticsQueryResultDto[] resultArr = this.analyticsStub.execute(scriptContent);
+        AnalyticsQueryResultDto result = resultArr[resultArr.length - 1];
+        
+        List<Record> resp1 = AnalyticsDataAPIUtil.listRecords(this.analyticsDataAPI, this.analyticsDataAPI.get(1, GTA_STATS_TABLE, 1, null, Long.MIN_VALUE, Long.MAX_VALUE, 0, -1));
+        List<Record> resp2 = AnalyticsDataAPIUtil.listRecords(this.analyticsDataAPI, this.analyticsDataAPI.get(2, GTA_STATS_TABLE, 1, null, Long.MIN_VALUE, Long.MAX_VALUE, 0, -1));
+        List<Record> resp3 = AnalyticsDataAPIUtil.listRecords(this.analyticsDataAPI, this.analyticsDataAPI.get(1, GTA_STATS_SUMMARY_TABLE, 1, null, Long.MIN_VALUE, Long.MAX_VALUE, 0, -1));
+        List<Record> resp4 = AnalyticsDataAPIUtil.listRecords(this.analyticsDataAPI, this.analyticsDataAPI.get(2, GTA_STATS_SUMMARY_TABLE, 1, null, Long.MIN_VALUE, Long.MAX_VALUE, 0, -1));
+        Assert.assertEquals(resp1.size(), 4);
+        Assert.assertEquals(resp2.size(), 4);
+        Assert.assertEquals(resp3.size(), 2);
+        Assert.assertEquals(resp4.size(), 2);
+        
+        Assert.assertEquals(new HashSet<>(Arrays.asList(result.getColumnNames())), new HashSet<>(Arrays.asList("name", "cnt", "_tenantId")));
+        AnalyticsRowResultDto[] rows = result.getRowsResults();
+        Assert.assertEquals(rows.length, 4);
+        
+        log.info("Deleting table: " + GTA_STATS_TABLE + ", " + GTA_STATS_SUMMARY_TABLE + " for GTA TestCase (cleanup)");
+        this.analyticsDataAPI.deleteTable(MultitenantConstants.SUPER_TENANT_ID, GTA_STATS_TABLE);
+        this.analyticsDataAPI.deleteTable(1, GTA_STATS_TABLE);
+        this.analyticsDataAPI.deleteTable(2, GTA_STATS_TABLE);
+        this.analyticsDataAPI.deleteTable(MultitenantConstants.SUPER_TENANT_ID, GTA_STATS_SUMMARY_TABLE);
+        this.analyticsDataAPI.deleteTable(1, GTA_STATS_SUMMARY_TABLE);
+        this.analyticsDataAPI.deleteTable(2, GTA_STATS_SUMMARY_TABLE);
+    }
+
+    @Test(groups = "wso2.bam", description = "Executing script content with Spark UDAFs", dependsOnMethods = "executeScriptContent")
+    public void executeScriptSparkUDAF() throws Exception {
+        log.info("Deleting table: " + UDAF_TEST_TABLE + " for UDAF TestCase (if exists)");
+        this.analyticsDataAPI.deleteTable(MultitenantConstants.SUPER_TENANT_ID, UDAF_TEST_TABLE);
+
+        String scriptContent = getResourceContent(AnalyticsScriptTestCase.class, getAnalyticsScriptResourcePath("SparkUDAFScript.ql"));
+        AnalyticsQueryResultDto[] resultArr = this.analyticsStub.execute(scriptContent);
+        AnalyticsQueryResultDto analyticsResult = resultArr[resultArr.length - 1];
+        Assert.assertEquals(new HashSet<>(Arrays.asList(analyticsResult.getColumnNames())), new HashSet<>(Collections.singletonList("geomMean")));
+        AnalyticsRowResultDto[] rows = analyticsResult.getRowsResults();
+        Assert.assertEquals(rows.length, 1);
+        String[] results = rows[rows.length - 1].getColumnValues();
+        Assert.assertEquals(Math.round(Double.parseDouble(results[results.length - 1])), 8L);
+
+        log.info("Deleting table: " + UDAF_TEST_TABLE + " for UDAF TestCase (if exists)");
+        this.analyticsDataAPI.deleteTable(MultitenantConstants.SUPER_TENANT_ID, UDAF_TEST_TABLE);
+    }
 
     private String getAnalyticsScriptResourcePath(String scriptName){
-        return SCRIPT_RESOURCE_DIR+File.separator+scriptName;
+        return SCRIPT_RESOURCE_DIR + File.separator + scriptName;
     }
 
     //use this method since HttpRequestUtils.doGet does not support HTTPS.

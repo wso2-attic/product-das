@@ -21,6 +21,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.carbon.analytics.api.AnalyticsDataAPI;
+import org.wso2.carbon.analytics.api.AnalyticsDataAPIUtil;
 import org.wso2.carbon.analytics.api.CarbonAnalyticsAPI;
 import org.wso2.carbon.analytics.api.exception.AnalyticsServiceException;
 import org.wso2.carbon.analytics.dataservice.commons.AnalyticsDataResponse;
@@ -32,7 +33,11 @@ import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 import org.wso2.das.integration.common.utils.DASIntegrationTest;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public class AnalyticsAPIUserTestCase extends DASIntegrationTest {
     private AnalyticsDataAPI analyticsDataAPI;
@@ -144,9 +149,8 @@ public class AnalyticsAPIUserTestCase extends DASIntegrationTest {
         cols.add(IP_FIELD);
         cols.add(LOG_FIELD);
         AnalyticsDataResponse analyticsDataResponse = analyticsDataAPI.get(USERNAME, CREATE_TABLE_NAME, 1, cols, Long.MIN_VALUE, Long.MAX_VALUE, 0, -1);
-        Assert.assertEquals(analyticsDataResponse.getRecordGroups().length, 1);
-        Iterator<Record> recordIterator = analyticsDataAPI.readRecords(analyticsDataResponse.getRecordStoreName(),
-                analyticsDataResponse.getRecordGroups()[0]);
+        Assert.assertEquals(analyticsDataResponse.getEntries().size(), 1);
+        Iterator<Record> recordIterator = AnalyticsDataAPIUtil.responseToIterator(analyticsDataAPI, analyticsDataResponse);
         int recordCount = 0;
         while (recordIterator.hasNext()) {
             Record record = recordIterator.next();
@@ -166,9 +170,8 @@ public class AnalyticsAPIUserTestCase extends DASIntegrationTest {
             ids.add(recordIds.get(i));
         }
         AnalyticsDataResponse analyticsDataResponse = analyticsDataAPI.get(USERNAME, CREATE_TABLE_NAME, 1, cols, ids);
-        Assert.assertEquals(analyticsDataResponse.getRecordGroups().length, 1);
-        Iterator<Record> recordIterator = analyticsDataAPI.readRecords(analyticsDataResponse.getRecordStoreName(),
-                analyticsDataResponse.getRecordGroups()[0]);
+        Assert.assertEquals(analyticsDataResponse.getEntries().size(), 1);
+        Iterator<Record> recordIterator = AnalyticsDataAPIUtil.responseToIterator(analyticsDataAPI, analyticsDataResponse);
         int recordCount = 0;
         while (recordIterator.hasNext()) {
             recordIterator.next();

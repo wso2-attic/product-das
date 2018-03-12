@@ -19,7 +19,7 @@ package org.wso2.das.analytics.rest.beans;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.List;
+import java.util.Map;
 
 /**
  * This class Contains Sub-categories of a given facet field/column. "path" represents the hierarchical
@@ -30,7 +30,8 @@ import java.util.List;
 public class SubCategoriesBean {
 
     private String[] categoryPath;
-    private List<String> categories;
+    private int categoryCount;
+    private Map<String, Double> categories;
 
     /**
      * This constructor is used by JAX-RS
@@ -39,16 +40,39 @@ public class SubCategoriesBean {
 
     }
     public SubCategoriesBean(String[] path,
-                             List<String> categories) {
+                             Map<String, Double> categories) {
         this.categoryPath = path;
         this.categories = categories;
     }
 
-    public void setCategories(List<String> categories) {
+    public SubCategoriesBean(String[] categoryPath, int categoryCount,
+                             Map<String, Double> categories) {
+        this.categoryPath = categoryPath;
+        this.categoryCount = categoryCount;
+        this.categories = categories;
+    }
+
+    public void setCategories(Map<String, Double> categories) {
         this.categories = categories;
     }
 
     public void setCategoryPath(String[] categoryPath) {
         this.categoryPath = categoryPath;
+    }
+
+    public int getCategoryCount() {
+        return categoryCount;
+    }
+
+    public void setCategoryCount(int categoryCount) {
+        this.categoryCount = categoryCount;
+    }
+
+    public String[] getCategoryPath() {
+        return categoryPath;
+    }
+
+    public Map<String, Double> getCategories() {
+        return categories;
     }
 }
