@@ -9,7 +9,7 @@
         <relativePath>../../../pom.xml</relativePath>
     </parent>
 
-    <groupId>org.wso2.carbon.das</groupId>
+    <!--<groupId>org.wso2.carbon.das</groupId>-->
     <artifactId>org.wso2.carbon.das.migration</artifactId>
     <packaging>bundle</packaging>
     <name>org.wso2.carbon.das.migration</name>
@@ -18,7 +18,6 @@
     <version>1.0-SNAPSHOT</version>
     <url>http://maven.apache.org</url>
 
-    <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
@@ -35,6 +34,7 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.core.services</artifactId>
+                <version>${carbon.kernel.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
@@ -43,10 +43,10 @@
             <dependency>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>org.apache.felix.scr.annotations</artifactId>
+                <version>1.12.0</version>
                 <scope>provided</scope>
             </dependency>
         </dependencies>
-    </dependencyManagement>
 
     <build>
         <plugins>

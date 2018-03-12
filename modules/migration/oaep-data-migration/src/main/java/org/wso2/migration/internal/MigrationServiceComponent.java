@@ -1,6 +1,13 @@
 package org.wso2.migration.internal;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
+import org.wso2.carbon.base.api.ServerConfigurationService;
+import org.wso2.carbon.core.internal.CarbonCoreDataHolder;
+import org.wso2.carbon.registry.core.service.RegistryService;
+import org.wso2.carbon.user.core.service.RealmService;
 import org.wso2.migration.DataMigrationClient;
 import org.wso2.migration.DataMigrationClientImpl;
 
@@ -38,7 +45,7 @@ public class MigrationServiceComponent {
             }
 
             if (LOG.isDebugEnabled()) {
-                LOG.debug("WSO2 EI migration bundle is activated");
+                LOG.debug("WSO2 DAS migration bundle is activated");
             }
         } catch (Exception e) {
             LOG.error("Error while initiating Config component", e);
@@ -53,7 +60,7 @@ public class MigrationServiceComponent {
      */
     protected void deactivate(ComponentContext context) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("WSO2 EI migration bundle is deactivated");
+            LOG.debug("WSO2 DAS migration bundle is deactivated");
         }
     }
 
@@ -64,7 +71,7 @@ public class MigrationServiceComponent {
      */
     protected void setRealmService(RealmService realmService) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Setting RealmService to WSO2 EI Config component");
+            LOG.debug("Setting RealmService to WSO2 DAS Config component");
         }
         MigrationServiceDataHolder.setRealmService(realmService);
     }
@@ -76,7 +83,7 @@ public class MigrationServiceComponent {
      */
     protected void unsetRealmService(RealmService realmService) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Unsetting RealmService from WSO2 EI Config component");
+            LOG.debug("Unsetting RealmService from WSO2 DAS Config component");
         }
         MigrationServiceDataHolder.setRealmService(null);
     }
@@ -88,7 +95,7 @@ public class MigrationServiceComponent {
      */
     protected void setRegistryService(RegistryService registryService) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Setting RegistryService to WSO2 EI Config component");
+            LOG.debug("Setting RegistryService to WSO2 DAS Config component");
         }
         MigrationServiceDataHolder.setRegistryService(registryService);
         CarbonCoreDataHolder.getInstance().setRegistryService(registryService);
@@ -101,7 +108,7 @@ public class MigrationServiceComponent {
      */
     protected void unsetRegistryService(RegistryService registryService) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Unsetting RegistryService from WSO2 EI Config component");
+            LOG.debug("Unsetting RegistryService from WSO2 DAS Config component");
         }
         MigrationServiceDataHolder.setRegistryService(null);
     }
@@ -113,7 +120,7 @@ public class MigrationServiceComponent {
      */
     protected void setServerConfigurationService(ServerConfigurationService serverConfigurationService) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Setting ServerConfigurationService to WSO2 EI Config component");
+            LOG.debug("Setting ServerConfigurationService to WSO2 DAS Config component");
         }
         MigrationServiceDataHolder.setServerConfigurationService(serverConfigurationService);
         CarbonCoreDataHolder.getInstance().setServerConfigurationService(serverConfigurationService);
@@ -126,7 +133,7 @@ public class MigrationServiceComponent {
      */
     protected void unsetServerConfigurationService(ServerConfigurationService serverConfigurationService) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Unsetting ServerConfigurationService from WSO2 EI Config component");
+            LOG.debug("Unsetting ServerConfigurationService from WSO2 DAS Config component");
         }
         MigrationServiceDataHolder.setServerConfigurationService(null);
     }
