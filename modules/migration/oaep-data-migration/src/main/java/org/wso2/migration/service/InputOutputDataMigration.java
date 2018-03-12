@@ -84,7 +84,7 @@ public class InputOutputDataMigration extends Migrator {
                 NodeList data = getEncryptedPayload(doc, xpath);
                 if (data.getLength() > 0) {
                     for (int i = 0; i < data.getLength(); i++) {
-                        if (isOldDecryptedValue(data.item(i).getNodeValue())) {
+                        if (!isNewlyDecryptedValue(data.item(i).getNodeValue())) {
                             byte[] decryptedPassword = CryptoUtil.getDefaultCryptoUtil().base64DecodeAndDecrypt(
                                     data.item(i).getNodeValue(), "RSA");
                             String newEncryptedPassword = CryptoUtil.getDefaultCryptoUtil()
@@ -106,7 +106,7 @@ public class InputOutputDataMigration extends Migrator {
 
     }
 
-    private static boolean isOldDecryptedValue(String encryptedValue) throws DataMigrationException, CryptoException {
+    private static boolean isNewlyDecryptedValue(String encryptedValue) throws DataMigrationException, CryptoException {
         CryptoUtil cryptoUtil = null;
         try {
             cryptoUtil = CryptoUtil.getDefaultCryptoUtil(CarbonCoreDataHolder.getInstance().
