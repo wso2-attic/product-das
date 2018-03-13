@@ -398,6 +398,13 @@
                 <version>${carbon.analytics.version}</version>
             </dependency>
             <!--END - Integration Test Dependencies-->
+            <!--START - Migration Client  Dependencies-->
+            <dependency>
+                <groupId>org.wso2.carbon.analytics-common</groupId>
+                <artifactId>org.wso2.carbon.analytics.common.jmx.agent</artifactId>
+                <version>${carbon.analytics.common.version}</version>
+            </dependency>
+            <!--END - Migration Client  Dependencies-->
             <!-- START - Forget me tool -->
             <dependency>
                 <groupId>org.wso2.carbon.privacy</groupId>

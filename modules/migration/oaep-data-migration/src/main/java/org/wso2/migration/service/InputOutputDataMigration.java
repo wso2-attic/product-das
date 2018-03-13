@@ -4,11 +4,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
-import org.wso2.carbon.core.internal.CarbonCoreDataHolder;
-import org.wso2.carbon.core.util.CryptoException;
-import org.wso2.carbon.core.util.CryptoUtil;
 import org.wso2.migration.exception.DataMigrationException;
 import org.wso2.migration.utill.DataMigrationConstants;
+import org.wso2.migration.utill.DataMigrationUtil;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -78,18 +76,20 @@ public class InputOutputDataMigration extends Migrator {
         try {
             for (File fileEntry : Objects.requireNonNull(folder.listFiles())) {
                 builder = documentBuilderFactory.newDocumentBuilder();
+                if (!fileEntry.getName().endsWith(".xml")) {
+                    LOG.error("File type is not supported. file : '".
+                            concat(fileEntry.getName()).concat("'. Hence ignored"));
+                }
                 doc = builder.parse(fileEntry);
                 XPathFactory xpathFactory = XPathFactory.newInstance();
                 XPath xpath = xpathFactory.newXPath();
                 NodeList data = getEncryptedPayload(doc, xpath);
                 if (data.getLength() > 0) {
                     for (int i = 0; i < data.getLength(); i++) {
-                        if (!isNewlyDecryptedValue(data.item(i).getNodeValue())) {
-                            byte[] decryptedPassword = CryptoUtil.getDefaultCryptoUtil().base64DecodeAndDecrypt(
-                                    data.item(i).getNodeValue(), "RSA");
-                            String newEncryptedPassword = CryptoUtil.getDefaultCryptoUtil()
-                                    .encryptAndBase64Encode(decryptedPassword);
-                            data.item(i).setNodeValue(newEncryptedPassword);
+                        if (!DataMigrationUtil.isNewlyEncrypted(data.item(i).getNodeValue())) {
+                            String reEncryptedValue = DataMigrationUtil.reEncryptByNewAlgorithm(data.item(i).
+                                    getNodeValue());
+                            data.item(i).setNodeValue(reEncryptedValue);
                         }
                     }
 
@@ -100,33 +100,20 @@ public class InputOutputDataMigration extends Migrator {
             }
 
         } catch (Exception e) {
-            throw new DataMigrationException("Error occurred while migrating data in folder : " +
-                    folder.getAbsolutePath() + " . ", e);
+            throw new DataMigrationException("Error occurred while migrating data in folder : ".concat(
+                    folder.getAbsolutePath()).concat(" . "), e);
         }
 
     }
 
-    private static boolean isNewlyDecryptedValue(String encryptedValue) throws DataMigrationException, CryptoException {
-        CryptoUtil cryptoUtil = null;
-        try {
-            cryptoUtil = CryptoUtil.getDefaultCryptoUtil(CarbonCoreDataHolder.getInstance().
-                            getServerConfigurationService(),
-                    CarbonCoreDataHolder.getInstance().getRegistryService());
-        } catch (Exception e) {
-            throw new DataMigrationException("Error while initializing cryptoUtil", e);
-        }
-        return cryptoUtil.base64DecodeAndIsSelfContainedCipherText(encryptedValue);
-    }
-
-    private static NodeList getEncryptedPayload(Document doc, XPath xpath) throws Exception {
-
+    private static NodeList getEncryptedPayload(Document doc, XPath xpath) throws DataMigrationException {
         try {
             XPathExpression expr = xpath.compile(
                     "//*[local-name()='property'][@*[local-name()='encrypted'='true']]/text()");
             return (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
         } catch (XPathExpressionException e) {
-            throw new DataMigrationException("Error has occurred while retriving the payload from file : " +
-                    doc.getDocumentURI(), e);
+            throw new DataMigrationException("Error has occurred while retriving the payload from file : ".concat(
+                    doc.getDocumentURI()), e);
         }
 
     }
