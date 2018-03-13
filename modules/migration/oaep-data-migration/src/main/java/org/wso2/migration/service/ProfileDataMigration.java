@@ -29,8 +29,8 @@ public class ProfileDataMigration extends Migrator {
     private static final String PROFILE_SAVE_REG_LOCATION = "repository/components/org.wso2.carbon.publish.jmx.agent/";
     private static final Log LOG = LogFactory.getLog(ProfileDataMigration.class);
 
-    private  Registry registry;
-    private  RegistryService registryService;
+    private Registry registry;
+    private RegistryService registryService;
 
 
     @Override
