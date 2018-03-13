@@ -8,3 +8,6 @@ target
 *.ipr
 .idea
 .DS_Store
+
+# Ignore built sample CApps
+modules/samples/capps/target-capps/

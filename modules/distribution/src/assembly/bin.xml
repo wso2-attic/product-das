@@ -75,7 +75,7 @@
             </excludes>
         </fileSet>
         <fileSet>
-            <directory>../samples/capps/target</directory>
+            <directory>../samples/capps/target-capps</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/capps</outputDirectory>
         </fileSet>
 
