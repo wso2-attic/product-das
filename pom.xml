@@ -502,7 +502,7 @@
 
         <vizgrammar.version>2.0.0</vizgrammar.version>
 
-        <forgetme.tool.version>1.1.8</forgetme.tool.version>
+        <forgetme.tool.version>1.1.14</forgetme.tool.version>
 
         <project.scm.id>my-scm-server</project.scm.id>
     </properties>
