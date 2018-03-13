@@ -285,7 +285,7 @@
     </build>
 
     <properties>
-        <identity.jar.version>5.11.118</identity.jar.version>
+        <identity.jar.version>${carbon.identity.version}</identity.jar.version>
         <cep.samples.distribution.version>4.2.1-SNAPSHOT</cep.samples.distribution.version>
     </properties>
 

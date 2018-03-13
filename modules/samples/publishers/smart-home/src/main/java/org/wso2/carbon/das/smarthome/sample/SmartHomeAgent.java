@@ -60,7 +60,7 @@ public class SmartHomeAgent {
 
         System.out.println("Starting DAS Smart Home Agent");
         String currentDir = System.getProperty("user.dir");
-        System.setProperty("javax.net.ssl.trustStore", currentDir + "/src/main/resources/client-truststore.jks");
+        System.setProperty("javax.net.ssl.trustStore", "../../repository/resources/security/client-truststore.jks");
         System.setProperty("javax.net.ssl.trustStorePassword", "wso2carbon");
 
         AgentHolder.setConfigPath(getDataAgentConfigPath());
