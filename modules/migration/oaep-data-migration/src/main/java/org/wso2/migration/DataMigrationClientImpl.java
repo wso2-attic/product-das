@@ -5,6 +5,8 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.migration.exception.DataMigrationException;
 import org.wso2.migration.service.Migrator;
 
+import java.util.List;
+
 public class DataMigrationClientImpl implements DataMigrationClient {
     private static final Log LOG = LogFactory.getLog(DataMigrationClient.class);
 
@@ -12,12 +14,13 @@ public class DataMigrationClientImpl implements DataMigrationClient {
     public void execute() throws DataMigrationException {
         try {
             MigrationHolder migrationHolder = MigrationHolder.getInstance();
-            Migrator migrator = migrationHolder.getMigrator();
-
-            migrator.migrate();
+            List<Migrator> migrators = migrationHolder.getMigrators();
+            for (Migrator migrator : migrators) {
+                migrator.migrate();
+            }
             LOG.info("Migration was successful.");
-        } catch (DataMigrationException e) {
-            LOG.error("Error occurred while migrating. Migration stopped. ", e);
+        } catch (Exception e) {
+            throw new DataMigrationException("Error occurred while migrating. Migration stopped. ", e);
         }
     }
 }

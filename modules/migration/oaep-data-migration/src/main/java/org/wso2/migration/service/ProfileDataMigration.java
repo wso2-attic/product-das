@@ -3,7 +3,6 @@ package org.wso2.migration.service;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.analytics.common.jmx.agent.profiles.Profile;
-import org.wso2.carbon.analytics.common.jmx.agent.tasks.internal.JmxTaskServiceComponent;
 import org.wso2.carbon.core.util.CryptoException;
 import org.wso2.carbon.registry.core.Collection;
 import org.wso2.carbon.registry.core.Registry;
@@ -30,64 +29,52 @@ public class ProfileDataMigration extends Migrator {
     private static final Log LOG = LogFactory.getLog(ProfileDataMigration.class);
 
     private Registry registry;
-    private RegistryService registryService;
-
+    private RegistryService registryService = MigrationServiceDataHolder.getRegistryService();
 
     @Override
     public void migrate() throws DataMigrationException {
         migrateProfilePassword();
     }
 
-    private void migrateProfilePassword() {
-        Tenant[] tenants = new Tenant[0];
+    private void migrateProfilePassword() throws DataMigrationException {
+        Tenant[] tenants;
+        //for super tenant
+        try {
+            migrateProfilePasswordForTenant(DataMigrationConstants.SUPER_TENANT_ID);
+        } catch (DataMigrationException e) {
+            LOG.error("Error while migrating profiles. for tenant '".concat(
+                    String.valueOf(DataMigrationConstants.SUPER_TENANT_ID)).concat("'. "), e);
+        }
         try {
             tenants = MigrationServiceDataHolder.getRealmService().getTenantManager().getAllTenants();
         } catch (UserStoreException e) {
             LOG.error("Error while migrating profiles. Tenant retrieving failed. ", e);
+            return;
         }
         for (Tenant tenant : tenants) {
             try {
-                migrateProfilePasswordforTenant(tenant.getId());
+                migrateProfilePasswordForTenant(tenant.getId());
             } catch (DataMigrationException e) {
-                LOG.error("Error while migrating profiles. ", e);
+                throw new DataMigrationException("Error while migrating profiles for tenant '".concat(
+                        String.valueOf(tenant.getId())).concat("'. "), e);
             }
         }
     }
 
-
-    private void migrateProfilePasswordforTenant(int tenantID) throws DataMigrationException {
-        if (tenantID == DataMigrationConstants.SUPER_TENANT_ID) {
-            try {
-                Collection profilesCollection = (Collection) registry.get(PROFILE_SAVE_REG_LOCATION);
-                for (String profileName : profilesCollection.getChildren()) {
-                    Profile profile = getProfile(profileName);
-                    if (!DataMigrationUtil.isNewlyEncrypted(profile.getPass())) {
-                        reEncryptProfileWithNewCipher(profile);
-                    }
+    private void migrateProfilePasswordForTenant(int tenantID) throws DataMigrationException {
+        try {
+            registry = registryService.getGovernanceSystemRegistry(tenantID);
+            Collection profilesCollection = (Collection) registry.get(PROFILE_SAVE_REG_LOCATION);
+            for (String profileName : profilesCollection.getChildren()) {
+                Profile profile = getProfile(profileName);
+                if (!DataMigrationUtil.isNewlyEncrypted(profile.getPass())) {
+                    reEncryptProfileWithNewCipher(profile);
                 }
-            } catch (RegistryException e) {
-                throw new DataMigrationException("error while obtaining the registry ", e);
-            } catch (CryptoException e) {
-                throw new DataMigrationException("error while encrypting the registry ", e);
             }
-        } else {
-            try {
-                registryService = JmxTaskServiceComponent.getRegistryService();
-                registry = registryService.getGovernanceSystemRegistry(tenantID);
-                Collection profileCollection = (Collection) registry.get(PROFILE_SAVE_REG_LOCATION);
-                for (String profileName : profileCollection.getChildren()) {
-                    Profile profile = getProfile(profileName);
-                    if (!DataMigrationUtil.isNewlyEncrypted(profile.getPass())) {
-                        reEncryptProfileWithNewCipher(profile);
-                    }
-                }
-            } catch (RegistryException e) {
-                throw new DataMigrationException("error while obtaining the registry ", e);
-            } catch (CryptoException e) {
-                throw new DataMigrationException("error while encrypting the registry ", e);
-            }
-
-
+        } catch (RegistryException e) {
+            LOG.error("error while obtaining the registry ", e);
+        } catch (CryptoException e) {
+            throw new DataMigrationException("error while encrypting the registry ", e);
         }
     }
 
@@ -102,7 +89,7 @@ public class ProfileDataMigration extends Migrator {
         ByteArrayInputStream byteArrayInputStream;
         try {
             //if the profile exists
-            Resource res = registry.get(PROFILE_SAVE_REG_LOCATION + profileName);
+            Resource res = registry.get(profileName);
             byteArrayInputStream = new ByteArrayInputStream((byte[]) res.getContent());
         } catch (RegistryException e) {
             LOG.error("Unable to get profile : " + profileName + ". ", e);

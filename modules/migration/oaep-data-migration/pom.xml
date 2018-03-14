@@ -82,9 +82,12 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Export-Package>
-                            org.wso2.tools.oaep-data-migration-client.*,
+                            org.wso2.migration.*,
                             org.wso2.carbon.core.*
                         </Export-Package>
+                        <Private-Package>
+                            org.wso2.carbon.analytics.common.jmx.agent.profiles.*
+                        </Private-Package>
                         <DynamicImport-Package>*</DynamicImport-Package>
                         <Import-Package>
                             org.osgi.framework.*,
