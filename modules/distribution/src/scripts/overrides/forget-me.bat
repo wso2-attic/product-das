@@ -68,7 +68,6 @@ cd ..
 set toolDir=%cd%
 cd ..\..\..\..
 set BASEDIR=%cd%
-echo %BASEDIR%
 
 :repoSetup
 set REPO=
