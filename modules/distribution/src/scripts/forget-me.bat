@@ -32,9 +32,12 @@ rem ---------------------------------------------------------------------------
 :checkServer
 setlocal enabledelayedexpansion
 rem %~sdp0 is expanded pathname of the current script under NT with spaces in the path removed
-if "%CARBON_HOME%"=="" set CARBON_HOME=%~sdp0..
+if "%CARBON_HOME%"=="" set CARBON_HOME=%cd%
+cd ..
+set CARBON_HOME=%cd%
 SET curDrive=%cd:~0,1%
 SET wsasDrive=%CARBON_HOME:~0,1%
 if not "%curDrive%" == "%wsasDrive%" %wsasDrive%:
 cd %CARBON_HOME%
-call %CARBON_HOME%\repository\components\tools\identity-anonymization-tool\bin\forget-me.bat
+call %CARBON_HOME%\repository\components\tools\identity-anonymization-tool\bin\forget-me.bat -U %1 -d %CARBON_HOME%\repository\components\tools\identity-anonymization-tool\conf -carbon %CARBON_HOME%
+
