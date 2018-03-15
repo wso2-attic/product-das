@@ -294,105 +294,71 @@
                 <a name="h.3six18dflox9"></a>
                 <font color="#333333"><font size="6" style="font-size: 22pt">What are
                                                                              the cookies used?</font></font></h2>
-            <table width="858" cellpadding="11" cellspacing="0">
-                <col width="122">
-                <col width="598">
-                <col width="69">
+            <table width="858" cellpadding="9" cellspacing="0">
+                <col width="266">
+                <col width="268">
+                <col width="266">
                 <tr valign="top">
-                    <td width="122" bgcolor="#ffffff"
-                        style="border-top: 0.75pt solid #dddddd; border-bottom: none; border-left: 0.75pt solid #dddddd; border-right: 0.75pt solid #dddddd; padding-top: 0.08in; padding-bottom: 0in; padding-left: 0.08in; padding-right: 0.08in">
-                        <p class="western" align="left" style="border: none; padding: 0in; orphans: 2; widows: 2">
+                    <td width="266" style="border-top: 1.00pt solid #000001; border-bottom: none; border-left: 1.00pt solid #000001; border-right: 1.00pt solid #000001; padding-top: 0.07in; padding-bottom: 0in; padding-left: 0.07in; padding-right: 0.07in">
+                        <p class="western" align="center" style="border: none; padding: 0in; orphans: 0; widows: 0">
+                            <b>Web Application</b></p>
+                    </td>
+                    <td width="268" style="border-top: 1.00pt solid #000001; border-bottom: none; border-left: 1.00pt solid #000001; border-right: 1.00pt solid #000001; padding-top: 0.07in; padding-bottom: 0in; padding-left: 0.07in; padding-right: 0.07in">
+                        <p class="western" align="center" style="border: none; padding: 0in; orphans: 0; widows: 0">
                             <b>Cookie Name</b></p>
                     </td>
-                    <td width="598" bgcolor="#ffffff"
-                        style="border-top: 0.75pt solid #dddddd; border-bottom: none; border-left: 0.75pt solid #dddddd; border-right: 0.75pt solid #dddddd; padding-top: 0.08in; padding-bottom: 0in; padding-left: 0.08in; padding-right: 0.08in">
-                        <p class="western" align="left" style="border: none; padding: 0in; orphans: 2; widows: 2">
+                    <td width="266" style="border-top: 1.00pt solid #000001; border-bottom: none; border-left: 1.00pt solid #000001; border-right: 1.00pt solid #000001; padding-top: 0.07in; padding-bottom: 0in; padding-left: 0.07in; padding-right: 0.07in">
+                        <p class="western" align="center" style="border-top: none; border-bottom: none; border-left: none; border-right: none; padding: 0in; orphans: 0; widows: 0">
                             <b>Purpose</b></p>
                     </td>
-                    <td width="69" bgcolor="#ffffff"
-                        style="border-top: 0.75pt solid #dddddd; border-bottom: none; border-left: 0.75pt solid #dddddd; border-right: 0.75pt solid #dddddd; padding-top: 0.08in; padding-bottom: 0in; padding-left: 0.08in; padding-right: 0.08in">
-                        <p class="western" align="left"
-                           style="border-top: none; border-bottom: none; border-left: none; padding: 0in; orphans: 2; widows: 2">
-                            <b>Retention</b></p>
-                    </td>
                 </tr>
                 <tr valign="top">
-                    <td width="122" bgcolor="#ffffff"
-                        style="border-top: 0.75pt solid #dddddd; border-bottom: none; border-left: 0.75pt solid #dddddd; border-right: 0.75pt solid #dddddd; padding-top: 0.08in; padding-bottom: 0in; padding-left: 0.08in; padding-right: 0.08in">
-                        <p class="western" align="left" style="border: none; padding: 0in; orphans: 2; widows: 2">
+                    <td width="266" style="border-top: 1.00pt solid #000001; border-bottom: none; border-left: 1.00pt solid #000001; border-right: 1.00pt solid #000001; padding-top: 0.07in; padding-bottom: 0in; padding-left: 0.07in; padding-right: 0.07in">
+                        <p class="western" align="left" style="border: none; padding: 0in; orphans: 0; widows: 0">
+                            Portal</p>
+                    </td>
+                    <td width="268" style="border-top: 1.00pt solid #000001; border-bottom: none; border-left: 1.00pt solid #000001; border-right: 1.00pt solid #000001; padding-top: 0.07in; padding-bottom: 0in; padding-left: 0.07in; padding-right: 0.07in">
+                        <p class="western" align="left" style="border: none; padding: 0in; orphans: 0; widows: 0">
                             JSESSIONID</p>
                     </td>
-                    <td width="598" bgcolor="#ffffff"
-                        style="border-top: 0.75pt solid #dddddd; border-bottom: none; border-left: 0.75pt solid #dddddd; border-right: 0.75pt solid #dddddd; padding-top: 0.08in; padding-bottom: 0in; padding-left: 0.08in; padding-right: 0.08in">
-                        <p class="western" align="left" style="border: none; padding: 0in; orphans: 2; widows: 2">
-                            To keep your session data in order to give you a good user
-                            experience.</p>
-                    </td>
-                    <td width="69" bgcolor="#ffffff"
-                        style="border-top: 0.75pt solid #dddddd; border-bottom: none; border-left: 0.75pt solid #dddddd; border-right: 0.75pt solid #dddddd; padding-top: 0.08in; padding-bottom: 0in; padding-left: 0.08in; padding-right: 0.08in">
-                        <p class="western" align="left"
-                           style="border-top: none; border-bottom: none; border-left: none; border-right: none; padding: 0in; orphans: 2; widows: 2">
-                            Session</p>
+                    <td width="266" style="border-top: 1.00pt solid #000001; border-bottom: none; border-left: 1.00pt solid #000001; border-right: 1.00pt solid #000001; padding-top: 0.07in; padding-bottom: 0in; padding-left: 0.07in; padding-right: 0.07in">
+                        <p class="western" align="left" style="border-top: none; border-bottom: none; border-left: none; border-right: none; padding: 0in; orphans: 0; widows: 0">
+                            Maintains the browser session of the Portal</p>
                     </td>
                 </tr>
                 <tr valign="top">
-                    <td width="122" bgcolor="#ffffff"
-                        style="border-top: 0.75pt solid #dddddd; border-bottom: none; border-left: 0.75pt solid #dddddd; border-right: 0.75pt solid #dddddd; padding-top: 0.08in; padding-bottom: 0in; padding-left: 0.08in; padding-right: 0.08in">
-                        <p class="western" align="left" style="border: none; padding: 0in; orphans: 2; widows: 2">
-                            MSGnnnnnnnnnn</p>
+                    <td width="266" style="border-top: 1.00pt solid #000001; border-bottom: 1.00pt solid #fff; border-left: 1.00pt solid #000001; border-right: 1.00pt solid #000001; padding-top: 0.07in; padding-bottom: 0in; padding-left: 0.07in; padding-right: 0.07in">
+                        <p class="western" align="left" style="border: none; padding: 0in; orphans: 0; widows: 0">
+                            Machine Learner</p>
                     </td>
-                    <td width="598" bgcolor="#ffffff"
-                        style="border-top: 0.75pt solid #dddddd; border-bottom: none; border-left: 0.75pt solid #dddddd; border-right: 0.75pt solid #dddddd; padding-top: 0.08in; padding-bottom: 0in; padding-left: 0.08in; padding-right: 0.08in">
-                        <p class="western" align="left"
-                           style="margin-bottom: 0.32in; border: none; padding: 0in; orphans: 2; widows: 2">
-                            To keep some messages that are shown to you in order to give you a
-                            good user experience.</p>
-                        <p class="western" align="left" style="border: none; padding: 0in; orphans: 2; widows: 2">
-                            The “nnnnnnnnnn” reference in this coookie represents a random
-                            number e.g., MSG324935932.</p>
+                    <td width="268" style="border-top: 1.00pt solid #000001; border-bottom: none; border-left: 1.00pt solid #000001; border-right: 1.00pt solid #000001; padding-top: 0.07in; padding-bottom: 0in; padding-left: 0.07in; padding-right: 0.07in">
+                        <p class="western" align="left" style="margin-bottom: 0in; border: none; padding: 0in; orphans: 0; widows: 0">
+                            JSESSIONID</p>
+                        <p class="western" align="left" style="border: none; padding: 0in; orphans: 0; widows: 0">
+                            for path /ml</p>
                     </td>
-                    <td width="69" bgcolor="#ffffff"
-                        style="border-top: 0.75pt solid #dddddd; border-bottom: none; border-left: 0.75pt solid #dddddd; border-right: 0.75pt solid #dddddd; padding-top: 0.08in; padding-bottom: 0in; padding-left: 0.08in; padding-right: 0.08in">
-                        <p class="western" align="left"
-                           style="border-top: none; border-bottom: none; border-left: none; border-right: none; padding: 0in; orphans: 2; widows: 2">
-                            Session</p>
+                    <td width="266" style="border-top: 1.00pt solid #000001; border-bottom: none; border-left: 1.00pt solid #000001; border-right: 1.00pt solid #000001; padding-top: 0.07in; padding-bottom: 0in; padding-left: 0.07in; padding-right: 0.07in">
+                        <p class="western" align="left" style="border-top: none; border-bottom: none; border-left: none; border-right: none; padding: 0in; orphans: 0; widows: 0">
+                            Maintains the browser session of the Machine Learner</p>
                     </td>
                 </tr>
                 <tr valign="top">
-                    <td width="122" bgcolor="#ffffff"
-                        style="border-top: 0.75pt solid #dddddd; border-bottom: none; border-left: 0.75pt solid #dddddd; border-right: 0.75pt solid #dddddd; padding-top: 0.08in; padding-bottom: 0in; padding-left: 0.08in; padding-right: 0.08in">
-                        <p class="western" align="left" style="border: none; padding: 0in; orphans: 2; widows: 2">
-                            requestedURI</p>
+                    <td width="266" style="border-top: 1.00pt solid #000001; border-bottom: 1.00pt solid #000001; border-left: 1.00pt solid #000001; border-right: 1.00pt solid #000001; padding-top: 0.07in; padding-bottom: 0in; padding-left: 0.07in; padding-right: 0.07in">
+                        <p class="western" align="left" style="border: none; padding: 0in; font-weight: normal; orphans: 0; widows: 0">
+                            <br/>
+
+                        </p>
                     </td>
-                    <td width="598" bgcolor="#ffffff"
-                        style="border-top: 0.75pt solid #dddddd; border-bottom: none; border-left: 0.75pt solid #dddddd; border-right: 0.75pt solid #dddddd; padding-top: 0.08in; padding-bottom: 0in; padding-left: 0.08in; padding-right: 0.08in">
-                        <p class="western" align="left" style="border: none; padding: 0in; orphans: 2; widows: 2">
-                            The URI you are accessing.</p>
+                    <td width="268" style="border-top: 1.00pt solid #000001; border-bottom: 1.00pt solid #000001; border-left: 1.00pt solid #000001; border-right: 1.00pt solid #000001; padding-top: 0.07in; padding-bottom: 0in; padding-left: 0.07in; padding-right: 0.07in">
+                        <p class="western" align="left" style="margin-bottom: 0in; border: none; padding: 0in; orphans: 0; widows: 0">
+                            JSESSIONID</p>
+                        <p class="western" align="left" style="border: none; padding: 0in; orphans: 0; widows: 0">
+                            for path /api</p>
                     </td>
-                    <td width="69" bgcolor="#ffffff"
-                        style="border-top: 0.75pt solid #dddddd; border-bottom: none; border-left: 0.75pt solid #dddddd; border-right: 0.75pt solid #dddddd; padding-top: 0.08in; padding-bottom: 0in; padding-left: 0.08in; padding-right: 0.08in">
-                        <p class="western" align="left"
-                           style="border-top: none; border-bottom: none; border-left: none; border-right: none; padding: 0in; orphans: 2; widows: 2">
-                            Session</p>
-                    </td>
-                </tr>
-                <tr valign="top">
-                    <td width="122" bgcolor="#ffffff"
-                        style="border-top: 0.75pt solid #dddddd; border-bottom: 0.75pt solid #dddddd; border-left: 0.75pt solid #dddddd; border-right: 0.75pt solid #dddddd; padding-top: 0.08in; padding-bottom: 0in; padding-left: 0.08in; padding-right: 0.08in">
-                        <p class="western" align="left" style="border: none; padding: 0in; orphans: 2; widows: 2">
-                            current-breadcrumb</p>
-                    </td>
-                    <td width="598" bgcolor="#ffffff"
-                        style="border-top: 0.75pt solid #dddddd; border-bottom: 0.75pt solid #dddddd; border-left: 0.75pt solid #dddddd; border-right: 0.75pt solid #dddddd; padding-top: 0.08in; padding-bottom: 0in; padding-left: 0.08in; padding-right: 0.08in">
-                        <p class="western" align="left" style="border: none; padding: 0in; orphans: 2; widows: 2">
-                            To keep your active page in session in order to give you a good
-                            user experience.</p>
-                    </td>
-                    <td width="69" bgcolor="#ffffff"
-                        style="border-top: 0.75pt solid #dddddd; border-bottom: 0.75pt solid #dddddd; border-left: 0.75pt solid #dddddd; border-right: 0.75pt solid #dddddd; padding-top: 0.08in; padding-bottom: 0in; padding-left: 0.08in; padding-right: 0.08in">
-                        <p class="western" align="left"
-                           style="border-top: none; border-bottom: none; border-left: none; border-right: none; padding: 0in; orphans: 2; widows: 2">
-                            Session</p>
+                    <td width="266" style="border-top: 1.00pt solid #000001; border-bottom: 1.00pt solid #000001; border-left: 1.00pt solid #000001; border-right: 1.00pt solid #000001; padding-top: 0.07in; padding-bottom: 0in; padding-left: 0.07in; padding-right: 0.07in">
+                        <p class="western" align="left" style="border-top: none; border-bottom: none; border-left: none; border-right: none; padding: 0in; orphans: 0; widows: 0">
+                            Maintains the browser session for the REST API endpoints of the
+                            Machine Learner web application</p>
                     </td>
                 </tr>
             </table>
