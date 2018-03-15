@@ -21,7 +21,7 @@ package org.wso2.migration;
 import org.wso2.migration.exception.DataMigrationException;
 
 /**
- * Data migration client interface
+ * Data migration client interface.
  **/
 public interface DataMigrationClient {
     void execute() throws DataMigrationException;

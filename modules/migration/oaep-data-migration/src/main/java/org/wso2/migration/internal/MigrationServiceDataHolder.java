@@ -61,7 +61,7 @@ public class MigrationServiceDataHolder {
     }
 
     /**
-     * Method to set server configuration service.
+     * Method to set server realm service.
      *
      * @param service RealmService.
      */
@@ -70,7 +70,7 @@ public class MigrationServiceDataHolder {
     }
 
     /**
-     * This method used to get RealmService.
+     * This method used to get server configuration service
      *
      * @return serverConfigurationService.
      */

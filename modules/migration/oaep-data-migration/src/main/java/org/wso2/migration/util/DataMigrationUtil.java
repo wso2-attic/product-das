@@ -24,7 +24,7 @@ import org.wso2.carbon.core.util.CryptoUtil;
 import org.wso2.migration.exception.DataMigrationException;
 
 /**
- * Migration util methods
+ * Migration util methods.
  **/
 public class DataMigrationUtil {
 

@@ -44,7 +44,7 @@ import javax.xml.stream.XMLStreamReader;
 
 
 /**
- * Migrate user store passwords
+ * Migrate user store passwords.
  **/
 public class UserStorePasswordMigration extends Migrator {
 

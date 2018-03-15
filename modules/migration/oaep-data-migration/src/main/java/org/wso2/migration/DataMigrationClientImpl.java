@@ -26,10 +26,10 @@ import org.wso2.migration.service.Migrator;
 import java.util.List;
 
 /**
- * Implementation of Data migration client
+ * Implementation of Data migration client.
  **/
 public class DataMigrationClientImpl implements DataMigrationClient {
-    private static final Log LOG = LogFactory.getLog(DataMigrationClient.class);
+    private static final Log LOG = LogFactory.getLog(DataMigrationClientImpl.class);
 
     @Override
     public void execute() throws DataMigrationException {

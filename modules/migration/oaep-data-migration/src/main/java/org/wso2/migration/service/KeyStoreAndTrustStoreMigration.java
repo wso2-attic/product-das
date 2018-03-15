@@ -43,11 +43,11 @@ import static org.wso2.carbon.base.MultitenantConstants.SUPER_TENANT_DOMAIN_NAME
 import static org.wso2.carbon.base.MultitenantConstants.SUPER_TENANT_ID;
 
 /**
- * Migrate encrypted data in key stores and trust stores
+ * Migrate encrypted data in key stores and trust stores.
  **/
 public class KeyStoreAndTrustStoreMigration extends Migrator {
     private static final String KEYSTORE_RESOURCE_PATH = "/repository/security/key-stores/";
-    private static final Log LOG = LogFactory.getLog(ProfileDataMigration.class);
+    private static final Log LOG = LogFactory.getLog(KeyStoreAndTrustStoreMigration.class);
     private static final String PASSWORD = "password";
     private static final String PRIVATE_KEY_PASS = "privatekeyPass";
 

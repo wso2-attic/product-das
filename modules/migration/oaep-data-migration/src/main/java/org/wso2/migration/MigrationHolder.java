@@ -28,8 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Migration data holder class
- * **/
+ * Migration data holder class.
+ **/
 public class MigrationHolder {
     private static MigrationHolder migrationHolder = new MigrationHolder();
     private List<Migrator> migrators = new ArrayList<>();

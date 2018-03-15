@@ -44,7 +44,7 @@ import javax.xml.bind.Unmarshaller;
 
 
 /**
- * Migrate profiles
+ * Migrate profiles.
  **/
 public class ProfileDataMigration extends Migrator {
     private static final String PROFILE_SAVE_REG_LOCATION = "repository/components/org.wso2.carbon.publish.jmx.agent/";
