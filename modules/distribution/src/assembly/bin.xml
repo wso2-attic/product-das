@@ -418,7 +418,7 @@
                 <include>**/lib/**</include>
                 <include>**/log4j.properties</include>
                 <include>**/conf/log-config/das-patterns.xml</include>
-                <include>**/conf/streams/**</include>
+                <include>**/conf/streams/das-streams.json</include>
             </includes>
             <fileMode>644</fileMode>
         </fileSet>
