@@ -57,32 +57,47 @@ set SAVEDIR=%CD%
 %0\
 cd %0\..\.. 
 set BASEDIR=%CD%
+
 cd %SAVEDIR%
 set SAVE_DIR=
 goto repoSetup
 
 :WinNTGetScriptDir
-set BASEDIR=%~dp0\..
+cd %~dp0
+cd ..
+set toolDir=%cd%
+cd ..\..\..\..
+set BASEDIR=%cd%
 
 :repoSetup
 set REPO=
 
-
 if "%JAVACMD%"=="" set JAVACMD=java
 
-if "%REPO%"=="" set REPO=%BASEDIR%\lib
+if "%REPO%"=="" set REPO=%toolDir%\lib
 
-set CLASSPATH="%BASEDIR%"\conf;"%REPO%"\*
+set CLASSPATH="%toolDir%\conf";"%REPO%\*"
 
 set ENDORSED_DIR=
-if NOT "%ENDORSED_DIR%" == "" set CLASSPATH="%BASEDIR%"\%ENDORSED_DIR%\*;%CLASSPATH%
 
-if NOT "%CLASSPATH_PREFIX%" == "" set CLASSPATH=%CLASSPATH_PREFIX%;%CLASSPATH%
+if NOT "%ENDORSED_DIR%" == "" set CLASSPATH="%toolDir%\%ENDORSED_DIR%\*";%CLASSPATH%
+
+if NOT "%CLASSPATH_PREFIX%" == "" set CLASSPATH="%CLASSPATH_PREFIX%";%CLASSPATH%
 
 @REM Reaching here means variables are defined and arguments have been captured
 :endInit
 
-%JAVACMD% %JAVA_OPTS% -Djndi.bind.off="true" -classpath %CLASSPATH% -Dapp.name="forget-me" -Dapp.repo="%REPO%" -Dapp.home="%BASEDIR%" -Dbasedir="%BASEDIR%" org.wso2.carbon.privacy.forgetme.ForgetMeTool %CMD_LINE_ARGS%
+FOR %%C in ("%BASEDIR%\repository\components\plugins\*.jar") DO (
+Echo.%%C | findstr /C:"slf4j">nul && (
+    echo "Skiping slf4j jar"
+) || (
+    set libs="%BASEDIR%\repository\components\plugins\%%C";%libs%
+)
+)
+
+set CLASSPATH=%libs%;%CLASSPATH%
+
+%JAVACMD% %JAVA_OPTS% -Djndi.bind.off="true" -classpath %CLASSPATH% -Dapp.name="forget-me" -Dapp.repo="%REPO%" -Dapp.home="%toolDir%" -Dbasedir="%toolDir%" org.wso2.carbon.privacy.forgetme.ForgetMeTool %CMD_LINE_ARGS%
 if %ERRORLEVEL% NEQ 0 goto error
 goto end
 
@@ -96,7 +111,7 @@ if "%OS%"=="Windows_NT" goto endNT
 
 @REM For old DOS remove the set variables from ENV - we assume they were not set
 @REM before we started - at least we don't leave any baggage around
-set CMD_LINE_ARGS=
+set CMD_LINE_ARGS= 
 goto postExec
 
 :endNT
@@ -111,3 +126,4 @@ if "%FORCE_EXIT_ON_ERROR%" == "on" (
 )
 
 exit /B %ERROR_CODE%
+
