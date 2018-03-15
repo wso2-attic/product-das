@@ -10,7 +10,7 @@
     </parent>
 
     <!--<groupId>org.wso2.carbon.das</groupId>-->
-    <artifactId>org.wso2.carbon.das.migration</artifactId>
+    <artifactId>org.wso2.das.migration</artifactId>
     <packaging>bundle</packaging>
     <name>org.wso2.carbon.das.migration</name>
     <modelVersion>4.0.0</modelVersion>
@@ -56,6 +56,8 @@
                 <artifactId>org.wso2.carbon.analytics.common.jmx.agent</artifactId>
             </dependency>
         </dependencies>
+
+
 
     <build>
         <plugins>

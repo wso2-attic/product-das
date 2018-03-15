@@ -16,17 +16,14 @@
  * under the License.
  */
 
-package org.wso2.migration.exception;
+package org.wso2.migration.util;
 
 /**
- * Exception class for DataMigrationUtil
+ * Contains all the constants used in migration client
  **/
-public class DataMigrationException extends Exception {
-    public DataMigrationException(String msg) {
-        super(msg);
-    }
-
-    public DataMigrationException(String msg, Throwable throwable) {
-        super(msg, throwable);
-    }
+public class DataMigrationConstants {
+    public static final String EVENT_PUBLISHER_PATH = "/repository/deployment/server/eventpublishers";
+    public static final String EVENT_RECIEVER_PATH = "/repository/deployment/server/eventreceivers";
+    public static final String CARBON_HOME = "carbon.home";
+    public static final int SUPER_TENANT_ID = -1234;
 }
