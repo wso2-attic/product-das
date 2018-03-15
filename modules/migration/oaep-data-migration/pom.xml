@@ -29,7 +29,6 @@
     <name>org.wso2.carbon.das.migration</name>
     <modelVersion>4.0.0</modelVersion>
 
-    <version>1.0.0-SNAPSHOT</version>
     <url>http://maven.apache.org</url>
 
     <dependencies>
