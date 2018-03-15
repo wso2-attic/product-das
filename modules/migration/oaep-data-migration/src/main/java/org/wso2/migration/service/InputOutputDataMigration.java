@@ -41,7 +41,6 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 
-
 /**
  * Migrate encrypted data in event publishers and event receivers
  **/
@@ -58,13 +57,8 @@ public class InputOutputDataMigration extends Migrator {
     @Override
     public void migrate() throws DataMigrationException {
         String carbonPath = System.getProperty(DataMigrationConstants.CARBON_HOME);
-        try {
-            migratePublishers(carbonPath);
-            migrateReceivers(carbonPath);
-
-        } catch (Exception e) {
-            throw new DataMigrationException("Error while migrating data : ", e);
-        }
+        migratePublishers(carbonPath);
+        migrateReceivers(carbonPath);
     }
 
     private static File readFiles(String path) {
@@ -77,7 +71,8 @@ public class InputOutputDataMigration extends Migrator {
             migrateData(publisherPath);
             LOG.info("Migrating publishers was successful");
         } catch (DataMigrationException e) {
-            throw new DataMigrationException("Error while migrating publishers", e);
+            throw new DataMigrationException("Error while migrating publishers in path : ".
+                    concat(publisherPath.getName()), e);
         }
     }
 
@@ -87,7 +82,8 @@ public class InputOutputDataMigration extends Migrator {
             migrateData(recieverPath);
             LOG.info("Migrating receivers was successful");
         } catch (DataMigrationException e) {
-            throw new DataMigrationException("Error while migrating receivers : ", e);
+            throw new DataMigrationException("Error while migrating receivers in path : "
+                    .concat(recieverPath.getName()), e);
         }
     }
 

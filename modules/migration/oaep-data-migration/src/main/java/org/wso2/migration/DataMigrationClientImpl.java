@@ -41,7 +41,7 @@ public class DataMigrationClientImpl implements DataMigrationClient {
             }
             LOG.info("Migration was successful.");
         } catch (Exception e) {
-            throw new DataMigrationException("Error occurred while migrating. Migration stopped. ", e);
+            LOG.error("Error occurred while migrating. Migration stopped. ", e);
         }
     }
 }
