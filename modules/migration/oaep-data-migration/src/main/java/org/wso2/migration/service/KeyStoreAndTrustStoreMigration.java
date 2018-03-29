@@ -75,10 +75,10 @@ public class KeyStoreAndTrustStoreMigration extends Migrator {
             UserStoreException {
         try {
             migrateKeyStorePasswordForTenant(SUPER_TENANT_ID);
-            LOG.info("Keystore passwords migrated for tenant : " + SUPER_TENANT_DOMAIN_NAME);
+            LOG.info("Keystore passwords migrated for tenant : ".concat(SUPER_TENANT_DOMAIN_NAME));
         } catch (Exception e) {
             throw new DataMigrationException("Error while migrating Keystore passwords for tenant : "
-                    + SUPER_TENANT_DOMAIN_NAME, e)
+                    .concat(SUPER_TENANT_DOMAIN_NAME), e);
         }
 
         //migrating tenant configurations
@@ -90,7 +90,7 @@ public class KeyStoreAndTrustStoreMigration extends Migrator {
                 LOG.info("Keystore passwords migrated for tenant : " + tenant.getDomain());
             } catch (Exception e) {
                 throw new DataMigrationException("Error while migrating keystore passwords for tenant : "
-                        + tenant.getDomain(), e)
+                        + tenant.getDomain(), e);
             } finally {
                 PrivilegedCarbonContext.endTenantFlow();
             }
@@ -133,7 +133,8 @@ public class KeyStoreAndTrustStoreMigration extends Migrator {
                 registry.commitTransaction();
             } catch (RegistryException e) {
                 registry.rollbackTransaction();
-                throw new DataMigrationException("Unable to update the registry resource", e);
+                throw new DataMigrationException("Unable to update the registry resource '".concat(resource)
+                        .concat("' "), e);
             } catch (DataMigrationException e) {
                 throw new DataMigrationException("Error while migrating Key Store and Trust Store.", e);
             }
