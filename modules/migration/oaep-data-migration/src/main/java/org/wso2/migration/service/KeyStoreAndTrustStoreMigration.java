@@ -75,10 +75,10 @@ public class KeyStoreAndTrustStoreMigration extends Migrator {
             UserStoreException {
         try {
             migrateKeyStorePasswordForTenant(SUPER_TENANT_ID);
-            LOG.info("Keystore passwords migrated for tenant : " + SUPER_TENANT_DOMAIN_NAME);
+            LOG.info("Keystore passwords migrated for tenant : ".concat(SUPER_TENANT_DOMAIN_NAME));
         } catch (Exception e) {
-            LOG.error("Error while migrating Keystore passwords for tenant : " + SUPER_TENANT_DOMAIN_NAME);
-            throw e;
+            throw new DataMigrationException("Error while migrating Keystore passwords for tenant : " +
+                    SUPER_TENANT_DOMAIN_NAME, e);
         }
 
         //migrating tenant configurations
@@ -89,8 +89,8 @@ public class KeyStoreAndTrustStoreMigration extends Migrator {
                 migrateKeyStorePasswordForTenant(tenant.getId());
                 LOG.info("Keystore passwords migrated for tenant : " + tenant.getDomain());
             } catch (Exception e) {
-                LOG.error("Error while migrating keystore passwords for tenant : " + tenant.getDomain());
-                throw e;
+                throw new DataMigrationException("Error while migrating keystore passwords for tenant : "
+                        + tenant.getDomain(), e);
             } finally {
                 PrivilegedCarbonContext.endTenantFlow();
             }
@@ -133,8 +133,8 @@ public class KeyStoreAndTrustStoreMigration extends Migrator {
                 registry.commitTransaction();
             } catch (RegistryException e) {
                 registry.rollbackTransaction();
-                LOG.error("Unable to update the registry resource", e);
-                throw e;
+                throw new DataMigrationException("Unable to update the registry resource '" + resource
+                        + "' ", e);
             } catch (DataMigrationException e) {
                 throw new DataMigrationException("Error while migrating Key Store and Trust Store.", e);
             }
