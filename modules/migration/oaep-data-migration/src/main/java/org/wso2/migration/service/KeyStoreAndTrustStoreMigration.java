@@ -77,8 +77,8 @@ public class KeyStoreAndTrustStoreMigration extends Migrator {
             migrateKeyStorePasswordForTenant(SUPER_TENANT_ID);
             LOG.info("Keystore passwords migrated for tenant : ".concat(SUPER_TENANT_DOMAIN_NAME));
         } catch (Exception e) {
-            throw new DataMigrationException("Error while migrating Keystore passwords for tenant : "
-                    .concat(SUPER_TENANT_DOMAIN_NAME), e);
+            throw new DataMigrationException("Error while migrating Keystore passwords for tenant : " +
+                    SUPER_TENANT_DOMAIN_NAME, e);
         }
 
         //migrating tenant configurations
@@ -133,8 +133,8 @@ public class KeyStoreAndTrustStoreMigration extends Migrator {
                 registry.commitTransaction();
             } catch (RegistryException e) {
                 registry.rollbackTransaction();
-                throw new DataMigrationException("Unable to update the registry resource '".concat(resource)
-                        .concat("' "), e);
+                throw new DataMigrationException("Unable to update the registry resource '" + resource
+                        + "' ", e);
             } catch (DataMigrationException e) {
                 throw new DataMigrationException("Error while migrating Key Store and Trust Store.", e);
             }
