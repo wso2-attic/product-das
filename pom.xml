@@ -472,7 +472,7 @@
         <carbon.event-processing.version>2.1.23</carbon.event-processing.version>
 
         <carbon.automationutils.version>4.4.1</carbon.automationutils.version>
-        <carbon.automation.version>4.4.2</carbon.automation.version>
+        <carbon.automation.version>4.4.3</carbon.automation.version>
         <carbon.registry.version>4.6.28</carbon.registry.version>
         <carbon.multitenancy.version>4.6.11</carbon.multitenancy.version>
         <carbon.deployment.version>4.7.15</carbon.deployment.version>
@@ -498,7 +498,7 @@
         <orbit.version.disruptor>3.3.2.wso2v2</orbit.version.disruptor>
         <orbit.version.h2>1.2.140.wso2v3</orbit.version.h2>
 
-        <jacoco.agent.version>0.7.4.201502262128</jacoco.agent.version>
+        <jacoco.agent.version>0.7.5.201505241946</jacoco.agent.version>
         <testng.version>6.1.1</testng.version>
 
         <version.equinox.osgi>3.8.1.v20120830-144521</version.equinox.osgi>
