@@ -42,7 +42,7 @@ import org.wso2.migration.DataMigrationClientImpl;
  * policy="dynamic" bind="setServerConfigurationService" unbind="unsetServerConfigurationService"
  */
 public class MigrationServiceComponent {
-    private static final Log LOG = LogFactory.getLog(MigrationServiceComponent.class);
+    private static final Log log = LogFactory.getLog(MigrationServiceComponent.class);
 
     /**
      * Method to activate bundle.
@@ -57,16 +57,16 @@ public class MigrationServiceComponent {
             // if -Dmigrate option is used.
             String migrate = System.getProperty("migrate");
             if (Boolean.parseBoolean(migrate)) {
-                LOG.info("Executing Migration client : " + DataMigrationClient.class.getName());
+                log.info("Executing Migration client : " + DataMigrationClient.class.getName());
                 DataMigrationClient migrationClientImpl = new DataMigrationClientImpl();
                 migrationClientImpl.execute();
             }
 
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("WSO2 DAS migration bundle is activated");
+            if (log.isDebugEnabled()) {
+                log.debug("WSO2 DAS migration bundle is activated");
             }
         } catch (Exception e) {
-            LOG.error("Error while initiating Config component", e);
+            log.error("Error while initiating Config component", e);
         }
 
     }
@@ -77,8 +77,8 @@ public class MigrationServiceComponent {
      * @param context OSGi component context.
      */
     protected void deactivate(ComponentContext context) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("WSO2 DAS migration bundle is deactivated");
+        if (log.isDebugEnabled()) {
+            log.debug("WSO2 DAS migration bundle is deactivated");
         }
     }
 
@@ -88,8 +88,8 @@ public class MigrationServiceComponent {
      * @param realmService service to get tenant data.
      */
     protected void setRealmService(RealmService realmService) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Setting RealmService to WSO2 DAS Config component");
+        if (log.isDebugEnabled()) {
+            log.debug("Setting RealmService to WSO2 DAS Config component");
         }
         MigrationServiceDataHolder.setRealmService(realmService);
     }
@@ -100,8 +100,8 @@ public class MigrationServiceComponent {
      * @param realmService service to get tenant data.
      */
     protected void unsetRealmService(RealmService realmService) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Unsetting RealmService from WSO2 DAS Config component");
+        if (log.isDebugEnabled()) {
+            log.debug("Unsetting RealmService from WSO2 DAS Config component");
         }
         MigrationServiceDataHolder.setRealmService(null);
     }
@@ -112,8 +112,8 @@ public class MigrationServiceComponent {
      * @param registryService service to get tenant data.
      */
     protected void setRegistryService(RegistryService registryService) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Setting RegistryService to WSO2 DAS Config component");
+        if (log.isDebugEnabled()) {
+            log.debug("Setting RegistryService to WSO2 DAS Config component");
         }
         MigrationServiceDataHolder.setRegistryService(registryService);
         CarbonCoreDataHolder.getInstance().setRegistryService(registryService);
@@ -125,8 +125,8 @@ public class MigrationServiceComponent {
      * @param registryService service to get tenant data.
      */
     protected void unsetRegistryService(RegistryService registryService) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Unsetting RegistryService from WSO2 DAS Config component");
+        if (log.isDebugEnabled()) {
+            log.debug("Unsetting RegistryService from WSO2 DAS Config component");
         }
         MigrationServiceDataHolder.setRegistryService(null);
     }
@@ -137,8 +137,8 @@ public class MigrationServiceComponent {
      * @param serverConfigurationService service to get tenant data.
      */
     protected void setServerConfigurationService(ServerConfigurationService serverConfigurationService) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Setting ServerConfigurationService to WSO2 DAS Config component");
+        if (log.isDebugEnabled()) {
+            log.debug("Setting ServerConfigurationService to WSO2 DAS Config component");
         }
         MigrationServiceDataHolder.setServerConfigurationService(serverConfigurationService);
         CarbonCoreDataHolder.getInstance().setServerConfigurationService(serverConfigurationService);
@@ -150,8 +150,8 @@ public class MigrationServiceComponent {
      * @param serverConfigurationService service to get tenant data.
      */
     protected void unsetServerConfigurationService(ServerConfigurationService serverConfigurationService) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Unsetting ServerConfigurationService from WSO2 DAS Config component");
+        if (log.isDebugEnabled()) {
+            log.debug("Unsetting ServerConfigurationService from WSO2 DAS Config component");
         }
         MigrationServiceDataHolder.setServerConfigurationService(null);
     }

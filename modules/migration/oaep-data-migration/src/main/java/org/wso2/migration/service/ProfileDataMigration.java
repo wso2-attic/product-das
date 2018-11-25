@@ -48,8 +48,7 @@ import javax.xml.bind.Unmarshaller;
  **/
 public class ProfileDataMigration extends Migrator {
     private static final String PROFILE_SAVE_REG_LOCATION = "repository/components/org.wso2.carbon.publish.jmx.agent/";
-    private static final Log LOG = LogFactory.getLog(ProfileDataMigration.class);
-
+    private static final Log log = LogFactory.getLog(ProfileDataMigration.class);
     private Registry registry;
     private RegistryService registryService = MigrationServiceDataHolder.getRegistryService();
 
@@ -64,13 +63,13 @@ public class ProfileDataMigration extends Migrator {
         try {
             migrateProfilePasswordForTenant(DataMigrationConstants.SUPER_TENANT_ID);
         } catch (DataMigrationException e) {
-            LOG.error("Error while migrating profiles. for tenant '".concat(
+            log.error("Error while migrating profiles. for tenant '".concat(
                     String.valueOf(DataMigrationConstants.SUPER_TENANT_ID)).concat("'. "), e);
         }
         try {
             tenants = MigrationServiceDataHolder.getRealmService().getTenantManager().getAllTenants();
         } catch (UserStoreException e) {
-            LOG.error("Error while migrating profiles. Tenant retrieving failed. ", e);
+            log.error("Error while migrating profiles. Tenant retrieving failed. ", e);
             return;
         }
         for (Tenant tenant : tenants) {
@@ -94,7 +93,7 @@ public class ProfileDataMigration extends Migrator {
                 }
             }
         } catch (RegistryException e) {
-            LOG.warn("error while obtaining the registry ", e);
+            log.warn("error while obtaining the registry ", e);
         } catch (CryptoException e) {
             throw new DataMigrationException("error while encrypting the registry ", e);
         }
@@ -107,7 +106,6 @@ public class ProfileDataMigration extends Migrator {
         saveUpdatedProfile(profile);
     }
 
-
     private Profile getProfile(String profileName) throws DataMigrationException {
         ByteArrayInputStream byteArrayInputStream;
         try {
@@ -115,7 +113,7 @@ public class ProfileDataMigration extends Migrator {
             Resource res = registry.get(profileName);
             byteArrayInputStream = new ByteArrayInputStream((byte[]) res.getContent());
         } catch (RegistryException e) {
-            LOG.error("Unable to get profile : " + profileName + ". ", e);
+            log.error("Unable to get profile : " + profileName + ". ", e);
             throw new DataMigrationException("Unable to get profile : ".concat(profileName).concat(". "), e);
         }
 
@@ -125,12 +123,11 @@ public class ProfileDataMigration extends Migrator {
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             profile = (Profile) jaxbUnmarshaller.unmarshal(byteArrayInputStream);
         } catch (JAXBException e) {
-            LOG.error("JAXB unmarshalling exception :" + profileName + ". ", e);
+            log.error("JAXB unmarshalling exception :" + profileName + ". ", e);
             throw new DataMigrationException("JAXB unmarshalling exception has occurred while retrieving '".
                     concat(profileName).concat("' profile from registry"), e);
         }
         return profile;
-
     }
 
     private void saveUpdatedProfile(Profile profile) throws DataMigrationException, RegistryException {
@@ -146,7 +143,6 @@ public class ProfileDataMigration extends Migrator {
             throw new DataMigrationException("JAXB unmarshalling exception has occurred while saving '".
                     concat(profile.getName()).concat("'."), e);
         }
-
         //replace the profile if it exists
         try {
             Resource res = registry.newResource();
@@ -167,9 +163,7 @@ public class ProfileDataMigration extends Migrator {
             byteArrayOutputStream.close();
         } catch (IOException e) {
             // Just log the exception. Do nothing.
-            LOG.warn("Unable to close byte stream ...", e);
-
+            log.warn("Unable to close byte stream ...", e);
         }
     }
-
 }

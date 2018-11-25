@@ -47,12 +47,11 @@ import javax.xml.stream.XMLStreamReader;
  * Migrate user store passwords.
  **/
 public class UserStorePasswordMigration extends Migrator {
-
-    private static final Log LOG = LogFactory.getLog(UserStorePasswordMigration.class);
+    private static final Log log = LogFactory.getLog(UserStorePasswordMigration.class);
 
     @Override
     public void migrate() throws DataMigrationException {
-        LOG.info("Migration starting on Secondary User Stores");
+        log.info("Migration starting on Secondary User Stores");
         updateSuperTenantConfigs();
         updateTenantConfigs();
     }
@@ -70,7 +69,7 @@ public class UserStorePasswordMigration extends Migrator {
                 }
             }
         } catch (Exception e) {
-            LOG.error("Error while updating secondary user store password for tenant", e);
+            log.error("Error while updating secondary user store password for tenant", e);
         }
     }
 
@@ -83,7 +82,7 @@ public class UserStorePasswordMigration extends Migrator {
                 }
             }
         } catch (Exception e) {
-            LOG.error("Error while updating secondary user store password for super tenant", e);
+            log.error("Error while updating secondary user store password for super tenant", e);
         }
     }
 
@@ -107,7 +106,7 @@ public class UserStorePasswordMigration extends Migrator {
         XMLStreamReader parser = null;
         FileInputStream stream = null;
         try {
-            LOG.info("Migrating password in: " + filePath);
+            log.info("Migrating password in: " + filePath);
             stream = new FileInputStream(filePath);
             parser = XMLInputFactory.newInstance().createXMLStreamReader(stream);
             StAXOMBuilder builder = new StAXOMBuilder(parser);
@@ -131,7 +130,7 @@ public class UserStorePasswordMigration extends Migrator {
                 documentElement.serialize(outputStream);
             }
         } catch (XMLStreamException ex) {
-            LOG.error("Error while updating password for: " + filePath);
+            log.error("Error while updating password for: " + filePath);
         } finally {
             try {
                 if (parser != null) {
@@ -141,11 +140,10 @@ public class UserStorePasswordMigration extends Migrator {
                     stream.close();
                 }
             } catch (XMLStreamException e) {
-                LOG.error("Error while closing XML stream", e);
+                log.error("Error while closing XML stream", e);
             } catch (IOException e) {
-                LOG.error("Error while closing input stream", e);
+                log.error("Error while closing input stream", e);
             }
-
         }
     }
 }
