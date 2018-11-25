@@ -26,10 +26,8 @@ import org.wso2.carbon.user.core.service.RealmService;
 public class MigrationServiceDataHolder {
     //Registry Service which is used to get registry data.
     private static RegistryService registryService;
-
     //Realm Service which is used to get tenant data.
     private static RealmService realmService;
-
     //ServerConfiguration Service which is used to get tenant data.
     private static ServerConfigurationService serverConfigurationService;
 

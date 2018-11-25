@@ -45,14 +45,11 @@ import javax.xml.xpath.XPathFactory;
  * Migrate encrypted data in event publishers and event receivers
  **/
 public class InputOutputDataMigration extends Migrator {
-    private static final Log LOG = LogFactory.getLog(InputOutputDataMigration.class);
-
+    private static final Log log = LogFactory.getLog(InputOutputDataMigration.class);
     private static InputOutputDataMigration instance = new InputOutputDataMigration();
-
     public static InputOutputDataMigration getInstance() {
         return instance;
     }
-
 
     @Override
     public void migrate() throws DataMigrationException {
@@ -69,7 +66,7 @@ public class InputOutputDataMigration extends Migrator {
         File publisherPath = readFiles(carbonHome + DataMigrationConstants.EVENT_PUBLISHER_PATH);
         try {
             migrateData(publisherPath);
-            LOG.info("Migrating publishers was successful");
+            log.info("Migrating publishers was successful");
         } catch (DataMigrationException e) {
             throw new DataMigrationException("Error while migrating publishers in path : ".
                     concat(publisherPath.getName()), e);
@@ -80,7 +77,7 @@ public class InputOutputDataMigration extends Migrator {
         File recieverPath = readFiles(carbonHome + DataMigrationConstants.EVENT_RECIEVER_PATH);
         try {
             migrateData(recieverPath);
-            LOG.info("Migrating receivers was successful");
+            log.info("Migrating receivers was successful");
         } catch (DataMigrationException e) {
             throw new DataMigrationException("Error while migrating receivers in path : "
                     .concat(recieverPath.getName()), e);
@@ -96,7 +93,7 @@ public class InputOutputDataMigration extends Migrator {
             for (File fileEntry : Objects.requireNonNull(folder.listFiles())) {
                 builder = documentBuilderFactory.newDocumentBuilder();
                 if (!fileEntry.getName().endsWith(".xml")) {
-                    LOG.error("File type is not supported. file : '".
+                    log.error("File type is not supported. file : '".
                             concat(fileEntry.getName()).concat("'. Hence ignored"));
                 }
                 doc = builder.parse(fileEntry);

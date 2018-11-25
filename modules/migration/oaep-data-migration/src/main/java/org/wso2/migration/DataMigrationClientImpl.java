@@ -29,7 +29,7 @@ import java.util.List;
  * Implementation of Data migration client.
  **/
 public class DataMigrationClientImpl implements DataMigrationClient {
-    private static final Log LOG = LogFactory.getLog(DataMigrationClientImpl.class);
+    private static final Log log = LogFactory.getLog(DataMigrationClientImpl.class);
 
     @Override
     public void execute() throws DataMigrationException {
@@ -39,9 +39,9 @@ public class DataMigrationClientImpl implements DataMigrationClient {
             for (Migrator migrator : migrators) {
                 migrator.migrate();
             }
-            LOG.info("Migration was successful.");
+            log.info("Migration was successful.");
         } catch (Exception e) {
-            LOG.error("Error occurred while migrating. Migration stopped. ", e);
+            log.error("Error occurred while migrating. Migration stopped. ", e);
         }
     }
 }

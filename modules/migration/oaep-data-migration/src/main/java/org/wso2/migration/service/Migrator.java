@@ -24,6 +24,5 @@ import org.wso2.migration.exception.DataMigrationException;
  * Migrator specific implementation.
  */
 public abstract class Migrator {
-
     public abstract void migrate() throws DataMigrationException;
 }

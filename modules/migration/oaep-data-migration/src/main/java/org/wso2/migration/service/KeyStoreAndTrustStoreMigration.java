@@ -47,10 +47,9 @@ import static org.wso2.carbon.base.MultitenantConstants.SUPER_TENANT_ID;
  **/
 public class KeyStoreAndTrustStoreMigration extends Migrator {
     private static final String KEYSTORE_RESOURCE_PATH = "/repository/security/key-stores/";
-    private static final Log LOG = LogFactory.getLog(KeyStoreAndTrustStoreMigration.class);
+    private static final Log log = LogFactory.getLog(KeyStoreAndTrustStoreMigration.class);
     private static final String PASSWORD = "password";
     private static final String PRIVATE_KEY_PASS = "privatekeyPass";
-
 
     private RegistryService registryService = MigrationServiceDataHolder.getRegistryService();
 
@@ -75,7 +74,7 @@ public class KeyStoreAndTrustStoreMigration extends Migrator {
             UserStoreException {
         try {
             migrateKeyStorePasswordForTenant(SUPER_TENANT_ID);
-            LOG.info("Keystore passwords migrated for tenant : ".concat(SUPER_TENANT_DOMAIN_NAME));
+            log.info("Keystore passwords migrated for tenant : ".concat(SUPER_TENANT_DOMAIN_NAME));
         } catch (Exception e) {
             throw new DataMigrationException("Error while migrating Keystore passwords for tenant : " +
                     SUPER_TENANT_DOMAIN_NAME, e);
@@ -87,7 +86,7 @@ public class KeyStoreAndTrustStoreMigration extends Migrator {
             try {
                 startTenantFlow(tenant);
                 migrateKeyStorePasswordForTenant(tenant.getId());
-                LOG.info("Keystore passwords migrated for tenant : " + tenant.getDomain());
+                log.info("Keystore passwords migrated for tenant : " + tenant.getDomain());
             } catch (Exception e) {
                 throw new DataMigrationException("Error while migrating keystore passwords for tenant : "
                         + tenant.getDomain(), e);
