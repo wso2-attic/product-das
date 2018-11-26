@@ -99,7 +99,6 @@
                         <Private-Package>
                             org.wso2.carbon.analytics.common.jmx.agent.profiles.*
                         </Private-Package>
-                        <DynamicImport-Package>*</DynamicImport-Package>
                         <Import-Package>
                             org.osgi.framework.*,
                             org.osgi.service.component.*,
