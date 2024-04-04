@@ -16,6 +16,9 @@
   ~  under the License.
   -->
 
+# NOTE
+## WSO2 DAS product is no longer maintained. We are deprecating and moving this product and moving to attic.
+
 WSO2 Data Analytics Server
 ==========================
 
